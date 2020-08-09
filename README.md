@@ -12,7 +12,7 @@ It has 5,672 lines of code, written by Joseph Prichard.
 * Export Board to FEN format 
 * Piece Style and Tile Color customization options
 
-## Usage
+## Guide
 ### MenuBar
 * New Button: Click to create a new game and its Time settings
 * Reset Button: Reset the board and timer back to initial settings
@@ -29,6 +29,6 @@ It has 5,672 lines of code, written by Joseph Prichard.
 ## Images
 <img src="https://github.com/JosephPrichard/ChessLiteGUI/blob/master/docments/chesslite1.png?raw=true" width="70%" height="70%"><br>
 <img src="https://github.com/JosephPrichard/ChessLiteGUI/blob/master/docments/chesslite3.jpg?raw=true" width="70%" height="70%"><br>
-<img src="https://github.com/JosephPrichard/ChessLiteGUI/blob/master/docments/chesslite5.jpg?raw=true" width="70%" height="70%">
+<img src="https://github.com/JosephPrichard/ChessLiteGUI/blob/master/docments/chesslite5.png?raw=true" width="70%" height="70%">
 
 
