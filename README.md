@@ -7,7 +7,7 @@ ChessLite has 5,672 lines of code written by the Author.
 * Algorithms that follow the rules of Standard Chess
 * Supports both Drag-Drop and Click-Click 
 * Displays each Game move on the right of the application
-* Return to previous Boards at certain chess moves 
+* Return to previous boardstates in the Game
 * Take Back any Move that is made
 * Export Game to PGN file
 * Export Board to FEN format 
