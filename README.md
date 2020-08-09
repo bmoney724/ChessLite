@@ -20,10 +20,11 @@ It has 5,672 lines of code, written by Joseph Prichard.
 * Save Game: Exports the Game to PGN file to be saved on local machine
 * Copy Board: Copies the current Board's FEN format to clipboard
 * Appearance: Provides customization options for colors and pieces.
-### Below Notation Table
+### Notation Table
 * Left Button: Show the Board at the previous Move
 * Middle Button: Take Back a move
 * Right Button: Show the Board at the next Move
+* Click a move to jump to it
 
 ## Images
 <img src="https://github.com/JosephPrichard/ChessLiteGUI/blob/master/docments/chesslite1.png?raw=true" width="70%" height="70%"><br>
