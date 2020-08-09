@@ -70,7 +70,7 @@ public class ChessLite extends Application {
             "Brown", "Blue", "Green", "Red");
     
     public static String PATH = "alpha"; //path for piece package
-    public static final String CONFIG_NAME = "ChessConfig"; //file and config info
+    public static final String CONFIG_NAME = "ChessLiteConfig"; //file and config info
     public static final String DEFAULT_CONFIG_PATH = "/resources/DefaultConfig.dat";
     public static final String S = System.getProperty("file.separator");
     public static final String CONFIG_PATH = System.getProperty("user.home") + S + CONFIG_NAME + ".dat";
