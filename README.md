@@ -2,10 +2,13 @@
 A lightweight Chess GUI for playing Chess on a personal computer.
 
 ## Features
-* 
+* Algorithms that follow the rules of Standard Chess
 * Supports both Drag-Drop and Click-Click 
-* Export to PGN or FEN file
-* 
+* Displays each Game move on the right of the application
+* Return to previous Boards at certain chess moves 
+* Take Back any Move that is made
+* Export Game to PGN file
+* Export Board to FEN format 
 * Piece Style and Tile Color customization options
 
 ## Images
