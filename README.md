@@ -12,7 +12,7 @@ It has 5,672 lines of code, written by Joseph Prichard.
 * Export Board to FEN format 
 * Piece Style and Tile Color customization options
 
-## Guide 
+## Usage
 ### MenuBar
 * New Button: Click to create a new game and its Time settings
 * Reset Button: Reset the board and timer back to initial settings
