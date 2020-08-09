@@ -2,7 +2,10 @@
 A lightweight Chess GUI for playing Chess on a personal computer.
 
 #### Features
-* Drag and Drop
+* 
+* Supports both Drag/Drop and Click/Click 
+*
+* Piece Style and Tile Color customization options
 
 ## Images
 <img src="https://github.com/JosephPrichard/ChessLiteGUI/blob/master/docments/chesslite1.png?raw=true" width="70%" height="70%">
