@@ -1,5 +1,6 @@
 # ChessLiteGUI
 A lightweight Chess GUI for playing Chess on a personal computer.
+5,672 lines of code written by Joseph Prichard.
 
 ## Features
 * Algorithms that follow the rules of Standard Chess
@@ -16,4 +17,4 @@ A lightweight Chess GUI for playing Chess on a personal computer.
   
 <img src="https://github.com/JosephPrichard/ChessLiteGUI/blob/master/docments/chesslite3.jpg?raw=true" width="70%" height="70%">
 
-5,672 lines of code written by Joseph Prichard.
+
