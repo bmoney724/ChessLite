@@ -1,5 +1,5 @@
 # ChessLiteGUI
-A lightweight Chess GUI for playing Chess on a personal computer.
+A lightweight Chess GUI for playing Chess on a personal computer.<br>
 5,672 lines of code written by Joseph Prichard.
 
 ## Features
