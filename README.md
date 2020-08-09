@@ -1,6 +1,7 @@
 # ChessLiteGUI
 ChessLite is a lightweight Chess GUI for playing Chess on a personal computer. <br>
-ChessLite is written in Java, and built with JavaFX. All ChessLite algorithms were written for this project by Joseph Prichard.
+ChessLite is written in Java, and built with JavaFX. ChessLite does not depend on any libraries aside from Java and JavaFX API!
+All ChessLite algorithms were written for this project by Joseph Prichard.
 ChessLite has 5,672 lines of code written by the Author.
 
 ## Features
