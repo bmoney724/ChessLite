@@ -13,9 +13,9 @@ A lightweight Chess GUI for playing Chess on a personal computer.<br>
 * Piece Style and Tile Color customization options
 
 ## Images
-Checkmate
+Checkmate<br>
 <img src="https://github.com/JosephPrichard/ChessLiteGUI/blob/master/docments/chesslite1.png?raw=true" width="70%" height="70%">
-Drag and Drop
+Drag and Drop<br>
 <img src="https://github.com/JosephPrichard/ChessLiteGUI/blob/master/docments/chesslite3.jpg?raw=true" width="70%" height="70%">
 
 
