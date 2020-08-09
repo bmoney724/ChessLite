@@ -1,6 +1,8 @@
 # ChessLiteGUI
 A lightweight Chess GUI for playing Chess on a personal computer.
 
+#### Features
+
 ## Images
 <img src="https://github.com/JosephPrichard/ChessLiteGUI/blob/master/docments/chesslite1.png?raw=true" width="70%" height="70%">
   
