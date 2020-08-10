@@ -7,7 +7,7 @@ ChessLite has 5,672 lines of code written by the Author.
 
 ## Distribution
 * jar is contained in [dist folder](https://github.com/JosephPrichard/ChessLiteGUI/blob/master/dist/ChessLite.jar) for users with JRE
-* packaged exe is contained in [dist folder](https://github.com/JosephPrichard/ChessLiteGUI/tree/master/dist/ChessLite1.0) for windows users... as this is a packaged distribution the .exe file must remain in ChessLite1.0 to work properly
+* packaged exe is contained in [dist folder](https://github.com/JosephPrichard/ChessLiteGUI/tree/master/dist/ChessLite1.0) for windows users... as this is a packaged distribution the exe file must remain in ChessLite1.0 to work properly
 * source code can be found in [src folder](https://github.com/JosephPrichard/ChessLiteGUI/tree/master/src) 
 
 ## Features
