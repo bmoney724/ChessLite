@@ -6,8 +6,8 @@ All ChessLite algorithms were written for this project by Joseph Prichard.
 ChessLite has 5,672 lines of code written by the Author.
 
 ## Distribution
-* <ins>JRE users:<ins> jar is contained in [dist folder](https://github.com/JosephPrichard/ChessLiteGUI/blob/master/dist/ChessLite.jar) 
-* <ins>Windows users:<ins> packaged exe is contained in [dist folder](https://github.com/JosephPrichard/ChessLiteGUI/tree/master/dist/ChessLite1.0)... as this is a packaged distribution the exe file must remain in ChessLite1.0 to work properly
+* <ins>JRE users:</ins> jar is contained in [dist folder](https://github.com/JosephPrichard/ChessLiteGUI/blob/master/dist/ChessLite.jar) 
+* <ins>Windows users:</ins> packaged exe is contained in [dist folder](https://github.com/JosephPrichard/ChessLiteGUI/tree/master/dist/ChessLite1.0)... as this is a packaged distribution the exe file must remain in ChessLite1.0 to work properly
 * source code can be found in [src folder](https://github.com/JosephPrichard/ChessLiteGUI/tree/master/src) 
 
 ## Features
