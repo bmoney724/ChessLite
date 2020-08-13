@@ -4,7 +4,7 @@ ChessLite is written in Java, and uses JavaFX.
 ChessLite does not depend on any libraries aside from Java and JavaFX API! 
 All ChessLite algorithms were written for this project by Joseph Prichard. 
 ChessLite has ~5600 lines of code written by the Author.
-Watch a short video demonstration [here](https://www.youtube.com/watch?v=QslRM_HlR0E&feature=youtu.be).
+Watch a short video demonstration [here](https://www.youtube.com/watch?v=m_j5ejDA-hc&feature=youtu.be).
 
 ## Distribution
 * <ins>Java users:</ins> jar is contained in [dist folder](https://github.com/JosephPrichard/ChessLiteGUI/blob/master/dist/ChessLite.jar) (preferred)
