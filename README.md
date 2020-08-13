@@ -38,6 +38,6 @@ Watch a short video demonstration [here](https://www.youtube.com/watch?v=QslRM_H
 ## Images
 <img src="https://github.com/JosephPrichard/ChessLiteGUI/blob/master/images/chesslite8.jpg?raw=true" width="70%" height="70%"><br>
 <img src="https://github.com/JosephPrichard/ChessLiteGUI/blob/master/images/chesslite7.png?raw=true" width="70%" height="70%"><br>
-<img src="https://github.com/JosephPrichard/ChessLiteGUI/blob/master/images/chesslite6.png?raw=true" width="70%" height="70%">
+<img src="https://github.com/JosephPrichard/ChessLiteGUI/blob/master/images/chesslite9.png?raw=true" width="70%" height="70%">
 
 
