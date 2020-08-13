@@ -301,6 +301,7 @@ public class ChessLite extends Application {
         styleLabel.setFont(new Font("Roboto",22*ChessLite.SCALE));
         ObservableList<String> pieceoptions = PIECES_OPTIONS;
         ComboBox pieceBox = new ComboBox<>(pieceoptions);
+        pieceBox.setPrefWidth(150*ChessLite.SCALE);
         pieceBox.setId("combobox");
         pieceBox.getSelectionModel().select(getPieceSelection(PATH));
         double size = 20*ChessLite.SCALE;
@@ -315,6 +316,7 @@ public class ChessLite extends Application {
         colorLabel.setFont(new Font("Roboto",22*ChessLite.SCALE));
         ObservableList<String> coloroptions = COLORS_OPTIONS;
         ComboBox colorBox = new ComboBox<>(coloroptions);
+        colorBox.setPrefWidth(130*ChessLite.SCALE);
         colorBox.setId("combobox");
         colorBox.getSelectionModel().select(COLOR_THEME);
         double size1 = 20*ChessLite.SCALE;
@@ -356,7 +358,7 @@ public class ChessLite extends Application {
         newroot.setTop(content);
         
         newWindow.getIcons().add(new Image(SETTINGS_ICON_PATH));
-        newWindow.setTitle("Settings");
+        newWindow.setTitle("Appearance");
         newWindow.setScene(secondScene);
         newWindow.setResizable(false);
 
