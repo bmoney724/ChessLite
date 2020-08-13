@@ -65,7 +65,7 @@ public class ChessLite extends Application {
             "Casual Untimed", "Classic 30+20", "Rapid 15+10", "Blitz 3+2", "Bullet 1+0");
     public static final int[][] TIMER_INFO = {{30*60,20},{15*60,10},{3*60,2},{1*60,0}};
     public static final ObservableList<String> PIECES_OPTIONS = FXCollections.observableArrayList(
-            "Classic", "Alpha", "Book", "Wooden", "Gothic");
+            "Classic", "Alpha", "Book", "Gothic");
     public static final ObservableList<String> COLORS_OPTIONS = FXCollections.observableArrayList(
             "Brown", "Blue", "Green", "Red");
     
@@ -74,7 +74,7 @@ public class ChessLite extends Application {
     public static final String DEFAULT_CONFIG_PATH = "/resources/DefaultConfig.dat";
     public static final String S = System.getProperty("file.separator");
     public static final String CONFIG_PATH = System.getProperty("user.home") + S + CONFIG_NAME + ".dat";
-    public static final String[] AVALIABLE_PATHS = {"classic","alpha","book","wooden","gothic"};
+    public static final String[] AVALIABLE_PATHS = {"classic","alpha","book","gothic"};
     public static final int BROWN = 0;
     public static final int BLUE = 1;
     public static final int GREEN = 2;
