@@ -35,8 +35,8 @@ ChessLite has ~5600 lines of code written by the Author.
 * Click a move to jump to it
 
 ## Images
-<img src="https://github.com/JosephPrichard/ChessLiteGUI/blob/master/images/chesslite1.png?raw=true" width="70%" height="70%"><br>
 <img src="https://github.com/JosephPrichard/ChessLiteGUI/blob/master/images/chesslite3.jpg?raw=true" width="70%" height="70%"><br>
+<img src="https://github.com/JosephPrichard/ChessLiteGUI/blob/master/images/chesslite7.png?raw=true" width="70%" height="70%"><br>
 <img src="https://github.com/JosephPrichard/ChessLiteGUI/blob/master/images/chesslite6.png?raw=true" width="70%" height="70%">
 
 
