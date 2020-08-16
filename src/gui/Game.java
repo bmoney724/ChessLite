@@ -48,14 +48,14 @@ public class Game {
 
     public static final int LOWER_BOUNDARY = 0;
     public static final int UPPER_BOUNDARY = 7;
-    public static final int WIDTH = 8;
     public static final int HEIGHT = 8;
+    public static final int WIDTH = 8;
     public static final double TILE_SIZE = 100*ChessLite.SCALE; //calculate GUI sizes based of ChessLite application scale
-    public static final double BAR_WIDTH = (ChessLite.WIDTH - 110 - WIDTH*TILE_SIZE);
+    public static final double BAR_WIDTH = (ChessLite.WIDTH - 110 - HEIGHT*TILE_SIZE);
     public static final double BAR_HEIGHT = ChessLite.SCALE*(ChessLite.HEIGHT/1.5);
     public static final Color GREEN = Color.rgb(85,107,47,0.7);
     public static final Color RED = Color.rgb(128,0,0,0.7);
-    public static final double BOARD_SIZE = TILE_SIZE * WIDTH;
+    public static final double BOARD_SIZE = TILE_SIZE * HEIGHT;
     public static final double ELEMENT_HEIGHT = 80*ChessLite.SCALE;
     public static final double SCOREBOARD_HEIGHT = 275*ChessLite.SCALE;
     public static final double TOP_BAR_HEIGHT = 70*ChessLite.SCALE;

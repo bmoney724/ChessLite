@@ -233,10 +233,10 @@ public final class Tile extends StackPane {
         
         if(boardIsWhite) {
             xReal = col * TILE_SIZE;
-            yReal = ((Game.HEIGHT-1) * Tile.TILE_SIZE) - (row * TILE_SIZE);
+            yReal = ((Game.WIDTH-1) * Tile.TILE_SIZE) - (row * TILE_SIZE);
             relocate(xReal, yReal);
         } else {
-            xReal = ((Game.WIDTH-1) * Tile.TILE_SIZE) - (col * TILE_SIZE);
+            xReal = ((Game.HEIGHT-1) * Tile.TILE_SIZE) - (col * TILE_SIZE);
             yReal = row * TILE_SIZE;
             relocate(xReal, yReal);
         }

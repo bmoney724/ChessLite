@@ -6,13 +6,13 @@
  */
 package gui;
 
-import static gui.Game.HEIGHT;
-import static gui.Game.WIDTH;
 import java.util.ArrayList;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import static gui.Game.WIDTH;
+import static gui.Game.HEIGHT;
 
 /**
  *
@@ -30,7 +30,7 @@ public class Board {
     public static int LOWER_BOUND = -1;
     
     private Pane boardGUI;
-    private final Tile[][] tiles = new Tile[WIDTH][HEIGHT]; //board tiles
+    private final Tile[][] tiles = new Tile[HEIGHT][WIDTH]; //board tiles
     private final ArrayList<Piece> blackNotKing = new ArrayList<>(); //pieces
     private final ArrayList<Piece> whiteNotKing = new ArrayList<>();
     private Piece blackKing; //kings
@@ -470,8 +470,8 @@ public class Board {
         Pane boardUI = new Pane();
         boolean isLight = false;
         //i is row, j is column
-        for(int i = 0; i < WIDTH; i++) {
-            for(int j = 0; j < HEIGHT; j++) {
+        for(int i = 0; i < HEIGHT; i++) {
+            for(int j = 0; j < WIDTH; j++) {
                 Tile tile = new Tile(isLight, i, j, true, game);
                 tiles[i][j] = tile;
                 boardUI.getChildren().add(tile);
@@ -501,7 +501,7 @@ public class Board {
                     StackPane.setAlignment(notationLabel, Pos.BOTTOM_LEFT);
                     tile.addLabel(notationLabel);
                 } 
-                if(j == (WIDTH - 1)) {
+                if(j == (HEIGHT - 1)) {
                     Label notationLabel = new Label(Integer.toString(i+1));
                     notationLabel.setId("tinyfont");
                     StackPane.setAlignment(notationLabel, Pos.TOP_RIGHT);
@@ -529,8 +529,8 @@ public class Board {
         Pane boardUI = new Pane();
         boolean IsLight = false;
         //i is row, j is column
-        for(int i = 0; i < WIDTH; i++) {
-            for(int j = 0; j < HEIGHT; j++) {
+        for(int i = 0; i < HEIGHT; i++) {
+            for(int j = 0; j < WIDTH; j++) {
                 Tile tile = new Tile(IsLight, i, j, false, game);
                 tiles[i][j] = tile;
                 boardUI.getChildren().add(tile);
@@ -554,7 +554,7 @@ public class Board {
                     boardUI.getChildren().add(piece);
                     piece.toFront();
                 }
-                if(i == HEIGHT-1) {
+                if(i == WIDTH-1) {
                     Label notationLabel = new Label(getCharacterNotation(j));
                     StackPane.setAlignment(notationLabel, Pos.BOTTOM_LEFT);
                     tile.addLabel(notationLabel);

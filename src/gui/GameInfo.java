@@ -403,8 +403,8 @@ public class GameInfo {
         byte[][] board = move.getBoard();
         String FEN = "";
         int spaceCount = 0;
-        for(int i = Game.WIDTH-1; i >= 0; i--) {
-            for(int j = 0; j < Game.HEIGHT; j++) {
+        for(int i = Game.HEIGHT-1; i >= 0; i--) {
+            for(int j = 0; j < Game.WIDTH; j++) {
                 if(board[i][j] != EMPTY) {
                     if(spaceCount != 0) {
                         FEN = FEN + spaceCount;
