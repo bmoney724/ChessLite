@@ -8,7 +8,7 @@ Watch a short video demonstration [here](https://www.youtube.com/watch?v=m_j5ejD
 
 ## Distribution
 * <ins>Raw Jar:</ins> jar is contained in [dist folder](https://github.com/JosephPrichard/ChessLiteGUI/blob/master/dist/ChessLite.jar)... this requires a newer version of the jre that supports javafx
-* <ins>Windows Installer:</ins> installer for windows contained [here](https://github.com/JosephPrichard/ChessLiteGUI/blob/master/dist/ChessLiteInstaller.exe)
+* <ins>Windows Installer:</ins> installer for windows contained [here](https://github.com/JosephPrichard/ChessLiteGUI/blob/master/dist/ChessLiteInstaller.exe)... works without jre
 * source code can be found in [src folder](https://github.com/JosephPrichard/ChessLiteGUI/tree/master/src) 
 
 ## Features
