@@ -7,8 +7,9 @@ ChessLite has ~5600 lines of code written by the Author.
 Watch a short video demonstration [here](https://www.youtube.com/watch?v=m_j5ejDA-hc&feature=youtu.be).
 
 ## Distribution
-* <ins>Raw Jar:</ins> jar is contained in [dist folder](https://github.com/JosephPrichard/ChessLiteGUI/blob/master/dist/ChessLite.jar)... this requires a newer version of the jre that supports javafx
-* <ins>Windows Installer:</ins> installer for windows contained [here](https://github.com/JosephPrichard/ChessLiteGUI/blob/master/dist/ChessLite_Installer.exe)... works without jre
+* <ins>[Windows Installation:](https://sourceforge.net/projects/chesslite/files/latest/download)</ins>
+* <ins>Raw Jar:</ins> jar is contained [here](https://github.com/JosephPrichard/ChessLiteGUI/blob/master/dist/ChessLite.jar)... this requires a newer version of the jre that supports javafx
+* <ins>Windows Installer:</ins> installer for windows is contained [here](https://github.com/JosephPrichard/ChessLiteGUI/blob/master/dist/ChessLite_Installer.exe)... works without jre
 * source code can be found in [src folder](https://github.com/JosephPrichard/ChessLiteGUI/tree/master/src) 
 
 ## Features
