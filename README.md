@@ -39,7 +39,7 @@ Watch a short video demonstration <ins>[here](https://www.youtube.com/watch?v=m_
 
 ## Images
 The piece bitmaps used in this application are from Chess.com
-<img src="https://github.com/JosephPrichard/ChessLiteGUI/blob/master/images/chesslite2.png?raw=true" width="70%" height="70%"><br>
+<img src="https://github.com/JosephPrichard/ChessLiteGUI/blob/master/images/chesslite3.png?raw=true" width="70%" height="70%"><br>
 <img src="https://github.com/JosephPrichard/ChessLiteGUI/blob/master/images/chesslite7.png?raw=true" width="70%" height="70%"><br>
 <img src="https://github.com/JosephPrichard/ChessLiteGUI/blob/master/images/chesslite9.png?raw=true" width="70%" height="70%">
 
