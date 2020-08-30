@@ -1,4 +1,4 @@
-# ChessLite 1.0
+# ChessLite 
 ChessLite is a lightweight Chess GUI for playing Chess on a personal computer. 
 ChessLite is written in Java and JavaFX. 
 ChessLite does not depend on any libraries aside from Java and JavaFX API! 
