@@ -11,7 +11,7 @@ Watch a short video demonstration <ins>[here](https://www.youtube.com/watch?v=m_
 ## Distribution
 * <ins>[Windows Installation](https://github.com/JosephPrichard/ChessLiteGUI/blob/master/dist/ChessLite_Installer.exe)</ins> 
 * <ins>[Jar (requires jre and javafx)](https://github.com/JosephPrichard/ChessLiteGUI/blob/master/dist/ChessLite.jar)</ins> 
-* source code can be found in <ins>[src folder](https://github.com/JosephPrichard/ChessLiteGUI/tree/master/src)</ins>
+* <ins>[Source code folder](https://github.com/JosephPrichard/ChessLiteGUI/tree/master/src)</ins>
 
 ## Features
 * Algorithms that follow the rules of Standard Chess
