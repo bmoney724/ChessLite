@@ -62,8 +62,10 @@ public class ChessLite extends Application {
             "Brown", "Blue", "Green", "Red");
     public static final String CONFIG_NAME = "ChessLiteConfig"; //file and config info
     public static final String DEFAULT_CONFIG_PATH = "/resources/DefaultConfig.dat";
-    public static final String S = System.getProperty("file.separator");
-    public static final String CONFIG_PATH = System.getProperty("user.home") + S + CONFIG_NAME + ".dat";
+    public static final String FOLDER = System.getProperty("file.separator") + ".ChessLiteDat";
+    public static final String CONFIG_DIR = System.getProperty("user.home") + FOLDER;
+    public static final String CONFIG_PATH = System.getProperty("user.home") + 
+            FOLDER + System.getProperty("file.separator") + CONFIG_NAME + ".dat";
     public static final String[] AVALIABLE_PATHS = {"classic","alpha","book","gothic"};
     public static final int BROWN = 0;
     public static final int BLUE = 1;
@@ -172,7 +174,9 @@ public class ChessLite extends Application {
      */
     @Override
     public void init() {
-        File file = new File(CONFIG_PATH);   
+        File dir = new File(CONFIG_DIR);  
+        dir.mkdir();
+        File file = new File(CONFIG_PATH);  
         try {
             if(file.createNewFile()) {
                 BufferedReader defaultConfigReader = new BufferedReader(new InputStreamReader(
