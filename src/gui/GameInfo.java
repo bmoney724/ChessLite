@@ -426,18 +426,22 @@ public class GameInfo {
         boolean boolIsWhite = moveNum % 2 == 0;
         String isWhite = boolIsWhite ? " b" : " w";
         FEN = FEN + isWhite;
-        boolean whiteQueenSide;
-        boolean whiteKingSide;
-        boolean blackQueenSide;
-        boolean blackKingSide;
+        boolean whiteQueenSide = true;
+        boolean whiteKingSide = true;
+        boolean blackQueenSide = true;
+        boolean blackKingSide = true;
         boolean whiteKingMoved = hasKingMoved(true);
         boolean blackKingMoved = hasKingMoved(false);
-        Move checkWhite = boolIsWhite ? moves.get(moveNum) : moves.get(moveNum - 1);
-        Move checkBlack = boolIsWhite ? moves.get(moveNum - 1) : moves.get(moveNum);
-        whiteKingSide = checkWhite.canKingSideCastle() && whiteKingMoved;
-        whiteQueenSide = checkWhite.canQueenSideCastle() && whiteKingMoved;
-        blackKingSide = checkBlack.canKingSideCastle() && blackKingMoved;
-        blackQueenSide = checkBlack.canQueenSideCastle() && blackKingMoved;
+        Move checkWhite;
+        Move checkBlack;
+        if(moveNum > 0) {
+            checkWhite = boolIsWhite ? moves.get(moveNum) : moves.get(moveNum - 1);
+            checkBlack = boolIsWhite ? moves.get(moveNum - 1) : moves.get(moveNum);
+            whiteKingSide = checkWhite.canKingSideCastle() && whiteKingMoved;
+            whiteQueenSide = checkWhite.canQueenSideCastle() && whiteKingMoved;
+            blackKingSide = checkBlack.canKingSideCastle() && blackKingMoved;
+            blackQueenSide = checkBlack.canQueenSideCastle() && blackKingMoved;
+        } 
         if(whiteQueenSide || whiteKingSide || blackQueenSide || blackKingSide) {
             String K = whiteKingSide ? "K" : "";
             String Q = whiteQueenSide ? "Q" : "";

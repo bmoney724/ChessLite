@@ -4,7 +4,6 @@
  */
 package gui.pieces;
 
-import gui.ChessLite;
 import gui.Game;
 import gui.Piece;
 import gui.Tile;
@@ -32,26 +31,33 @@ public final class Bishop extends Piece {
      * 
      */
     
-    public final String WHITE_BISHOP = "/resources/" + ChessLite.PATH + "/whitebishop.png";
-    public final String BLACK_BISHOP = "/resources/" + ChessLite.PATH + "/blackbishop.png";
+    public String whiteBishop;
+    public String blackBishop;
+    
+    public final void setPaths(String path) {
+        whiteBishop = "/resources/" + path + "/whitebishop.png";
+        blackBishop = "/resources/" + path + "/blackbishop.png";
+    }
     
     /**
      * Constructs a Bishop
      * 
      * @param isWhite side of the piece
      * @param tile tile piece belongs to
+     * @param path for image
     */
-    public Bishop(boolean isWhite, Tile tile) {
+    public Bishop(boolean isWhite, Tile tile, String path) {
         super(isWhite, tile);
+        setPaths(path);
         Image image;
         if(isWhite) {
-            image = new Image(WHITE_BISHOP);
+            image = new Image(whiteBishop);
         } else {
-            image = new Image(BLACK_BISHOP);
+            image = new Image(blackBishop);
         }
         ImageView imageView = new ImageView(image);
-        imageView.setFitHeight(TILE_SIZE);
-        imageView.setFitWidth(TILE_SIZE);
+        imageView.setFitHeight(tileSize);
+        imageView.setFitWidth(tileSize);
         this.getChildren().add(imageView);
     }
     

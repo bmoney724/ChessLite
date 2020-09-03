@@ -4,7 +4,6 @@
  */
 package gui.pieces;
 
-import gui.ChessLite;
 import gui.Game;
 import gui.Piece;
 import gui.Tile;
@@ -31,26 +30,33 @@ public final class Queen extends Piece{
      * X    O    O    X    O    O    X    O 
      */
     
-    public final String WHITE_QUEEN = "/resources/" + ChessLite.PATH + "/whitequeen.png";
-    public final String BLACK_QUEEN = "/resources/" + ChessLite.PATH + "/blackqueen.png";
+    public String whiteQueen;
+    public String blackQueen;
+    
+    public final void setPaths(String path) {
+        whiteQueen = "/resources/" + path + "/whitequeen.png";
+        blackQueen = "/resources/" + path + "/blackqueen.png";
+    }
     
     /**
      * Constructs a Queen
      * 
      * @param isWhite side of the piece
      * @param tile tile piece belongs to
+     * @param path for image
     */
-    public Queen(boolean isWhite, Tile tile) {
+    public Queen(boolean isWhite, Tile tile, String path) {
         super(isWhite, tile);
+        setPaths(path);
         Image image;
         if(isWhite) {
-            image = new Image(WHITE_QUEEN);
+            image = new Image(whiteQueen);
         } else {
-            image = new Image(BLACK_QUEEN);
+            image = new Image(blackQueen);
         }
         ImageView imageView = new ImageView(image);
-        imageView.setFitHeight(TILE_SIZE);
-        imageView.setFitWidth(TILE_SIZE);
+        imageView.setFitHeight(tileSize);
+        imageView.setFitWidth(tileSize);
         this.getChildren().add(imageView);
     }
     

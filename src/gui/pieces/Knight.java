@@ -4,7 +4,6 @@
  */
 package gui.pieces;
 
-import gui.ChessLite;
 import gui.Game;
 import gui.Piece;
 import gui.Tile;
@@ -31,26 +30,33 @@ public final class Knight extends Piece{
      * O    O    O    O    O    O    O    O 
      */
     
-    public final String WHITE_KNIGHT = "/resources/" + ChessLite.PATH + "/whiteknight.png";
-    public final String BLACK_KNIGHT = "/resources/" + ChessLite.PATH + "/blackknight.png";
+    public String whiteKnight;
+    public String blackKnight;
+    
+    public final void setPaths(String path) {
+        whiteKnight = "/resources/" + path + "/whiteknight.png";
+        blackKnight = "/resources/" + path + "/blackknight.png";
+    }
     
     /**
      * Constructs a Knight
      * 
      * @param isWhite side of the piece
      * @param tile tile piece belongs to
+     * @param path for image
     */
-    public Knight(boolean isWhite, Tile tile) {
+    public Knight(boolean isWhite, Tile tile, String path) {
         super(isWhite, tile);
+        setPaths(path);
         Image image;
         if(isWhite) {
-            image = new Image(WHITE_KNIGHT);
+            image = new Image(whiteKnight);
         } else {
-            image = new Image(BLACK_KNIGHT);
+            image = new Image(blackKnight);
         }
         ImageView imageView = new ImageView(image);
-        imageView.setFitHeight(TILE_SIZE);
-        imageView.setFitWidth(TILE_SIZE);
+        imageView.setFitHeight(tileSize);
+        imageView.setFitWidth(tileSize);
         this.getChildren().add(imageView);
     }
     

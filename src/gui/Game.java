@@ -8,7 +8,6 @@ package gui;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
-import static gui.ChessLite.TIMER_INFO;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -50,18 +49,23 @@ public class Game {
     public static final int UPPER_BOUNDARY = 7;
     public static final int HEIGHT = 8;
     public static final int WIDTH = 8;
-    public static final double TILE_SIZE = 100*ChessLite.SCALE; //calculate GUI sizes based of ChessLite application scale
-    public static final double BAR_WIDTH = (ChessLite.WIDTH - 110 - HEIGHT*TILE_SIZE);
-    public static final double BAR_HEIGHT = ChessLite.SCALE*(ChessLite.HEIGHT/1.5);
+    
     public static final Color GREEN = Color.rgb(85,107,47,0.7);
     public static final Color RED = Color.rgb(128,0,0,0.7);
-    public static final double BOARD_SIZE = TILE_SIZE * HEIGHT;
-    public static final double ELEMENT_HEIGHT = 80*ChessLite.SCALE;
-    public static final double SCOREBOARD_HEIGHT = 275*ChessLite.SCALE;
-    public static final double TOP_BAR_HEIGHT = 70*ChessLite.SCALE;
     public static int IN_PROGRESS = 0;
     public static int CHECKMATE = 1;
     public static int STALEMATE = 2;
+    public static final int NO_TIMER = -1;
+    
+    private double boardSize;
+    private double elementHeight;
+    private double scoreBoardHeight;
+    private double topBarHeight;
+    private double tilesize; //calculate GUI sizes based of ChessLite application scale
+    private double barWidth;
+    private double barHeight;
+    
+    private ChessLite app; //dependency on application 
     
     private final GameInfo gameInfo = new GameInfo(); //deals with previous moves and ByteBoard storage
     private final Board board = new Board(); //the current Board
@@ -83,18 +87,21 @@ public class Game {
     private boolean finished = false;
     private boolean canRender = true;
     private int gameResult = IN_PROGRESS;
-    private int timerType = ChessLite.NO_TIMER;
+    private int timerType = NO_TIMER;
+    public static final int[][] TIMER_INFO = {{30*60,20},{15*60,10},{3*60,2},{1*60,0}};
 
     /**
      * Constructs a new Game belonging to a stage
      * @param whiteStart, the starting position of the Game Board object
      * @param stageIn, the stage game belongs to
+     * @param app, the application object
      */
-    protected Game(boolean whiteStart, Stage stageIn) {
+    protected Game(boolean whiteStart, Stage stageIn, ChessLite app) {
+        setApp(app);
         whiteCirc = new Circle();
         blackCirc = new Circle();
-        whiteCirc.setRadius(8*ChessLite.SCALE);
-        blackCirc.setRadius(8*ChessLite.SCALE);
+        whiteCirc.setRadius(8*app.getScale());
+        blackCirc.setRadius(8*app.getScale());
         whiteBoardPosition = whiteStart;
         root = new AnchorPane();
         stage = stageIn;
@@ -108,10 +115,11 @@ public class Game {
      * renders the current Side turn
      * @param whiteStart, the starting position of the Game Board object
      * @param stageIn, the stage game belongs to
+     * @param app, the application object
      * @return constructed game
      */
-    public static final Game constructGame(boolean whiteStart, Stage stageIn) {
-        Game game = new Game(whiteStart, stageIn);
+    public static final Game constructGame(boolean whiteStart, Stage stageIn, ChessLite app) {
+        Game game = new Game(whiteStart, stageIn, app);
         game.initBoard(whiteStart);
         game.initRoot();
         game.preGame();
@@ -134,17 +142,60 @@ public class Game {
      * Initialization of the Game GUI's root node
      * Sets position of score board, navigation bar, and board GUI
      */
-    public void initRoot() {
+    public void initRoot() {   
         setSideBar(constructScoreBoard());
         HBox topBar = constructTopBar();
         HBox topBorder = constructTopBorder();
         AnchorPane.setTopAnchor(topBar, 1.0);
-        AnchorPane.setTopAnchor(getBoardGUI(), TOP_BAR_HEIGHT + 20.0);
+        AnchorPane.setTopAnchor(getBoardGUI(), topBarHeight + 20.0);
         AnchorPane.setLeftAnchor(getBoardGUI(), 15.0);
         AnchorPane.setTopAnchor(sideBar, ((stage.getHeight() - 
-                (ELEMENT_HEIGHT + SCOREBOARD_HEIGHT + ELEMENT_HEIGHT))/2)+10);
-        AnchorPane.setLeftAnchor(sideBar, (10+BOARD_SIZE)+(stage.getWidth()-10-BOARD_SIZE-BAR_WIDTH)/2);
+                (elementHeight + scoreBoardHeight + elementHeight))/2)+10);
+        AnchorPane.setLeftAnchor(sideBar, (10+boardSize)+(stage.getWidth()-10-boardSize-barWidth)/2);
         root.getChildren().addAll(topBorder,topBar,sideBar,getBoardGUI());
+    }
+    
+    private void setApp(ChessLite app) {
+        this.app = app;
+        tilesize = 100*app.getScale(); //calculate GUI sizes based of ChessLite application scale
+        boardSize = tilesize * HEIGHT;
+        elementHeight = 80*app.getScale();
+        scoreBoardHeight = 275*app.getScale();
+        topBarHeight = 70*app.getScale();
+        barWidth = (app.getWidth() - 110 - HEIGHT*tilesize);
+        barHeight = app.getScale()*(app.getHeight()/1.5);
+    }
+
+    public double getElementHeight() {
+        return elementHeight;
+    }
+
+    public double getScoreBoardHeight() {
+        return scoreBoardHeight;
+    }
+
+    public double getTopBarHeight() {
+        return topBarHeight;
+    }
+
+    public double getTilesize() {
+        return tilesize;
+    }
+
+    public double getBarWidth() {
+        return barWidth;
+    }
+
+    public double getBarHeight() {
+        return barHeight;
+    }
+
+    public double getBoardSize() {
+        return boardSize;
+    }
+    
+    public final ChessLite getApp() {
+        return app;
     }
     
     public ArrayList<Tile> getAttackingKing() {
@@ -269,10 +320,10 @@ public class Game {
      */
     public void addSelectable(Tile tile) {
         Selectable selectable = new Selectable(tile, this, Selectable.LIGHT_GREY,
-                Selectable.LIGHT_GREY, Selectable.GREY, Selectable.LIGHT_GREY){
+                Selectable.LIGHT_GREY, Selectable.GREY, Selectable.LIGHT_GREY, app){
             @Override
             public void move() {
-                ChessLite.clip.play();
+                app.getClip().play();
                 makeMove(tile);
                 clearSelectables();
             }
@@ -290,10 +341,10 @@ public class Game {
      */
     public void addEnPassantSelectable(Tile tile, int offset) {
         Selectable selectable = new Selectable(tile, this, Selectable.LIGHT_GREY,
-                Selectable.LIGHT_GREY, Selectable.GREY, Selectable.LIGHT_GREY) {
+                Selectable.LIGHT_GREY, Selectable.GREY, Selectable.LIGHT_GREY, app) {
             @Override
             public void move() {
-                ChessLite.clip.play();
+                app.getClip().play();
                 makeMoveEnPassant(tile, offset);
                 clearSelectables();
             }
@@ -310,11 +361,11 @@ public class Game {
      */
     public void addPromotionSelectable(Tile tile) {
         Selectable selectable = new Selectable(tile, this, Selectable.LIGHT_GREY,
-                Selectable.LIGHT_GREY, Selectable.GREY, Selectable.LIGHT_GREY){
+                Selectable.LIGHT_GREY, Selectable.GREY, Selectable.LIGHT_GREY, app){
             @Override
             public void move() {
                 boolean isWhite = getSelectedTile().getPiece().isWhite();
-                promotionSelection(isWhite);
+                promotionSelection(isWhite,app);
             }
         };
         selectable.relocate(tile.getxReal(), tile.getyReal());
@@ -332,10 +383,10 @@ public class Game {
      */
     public void addCastleSelectable(Tile tile, boolean forWhite, boolean kingSide) {
         Selectable selectable = new Selectable(tile, this, Selectable.LIGHT_GREY,
-                Selectable.LIGHT_GREY, Selectable.GREY, Selectable.LIGHT_GREY){
+                Selectable.LIGHT_GREY, Selectable.GREY, Selectable.LIGHT_GREY, app){
             @Override
             public void move() {
-                ChessLite.clip.play();
+                app.getClip().play();
                 makeMoveCastle(forWhite, kingSide);
                 clearSelectables();
             }
@@ -352,7 +403,7 @@ public class Game {
      */
     public void addVisualizable(Tile tile) {
         Selectable selectable = new Selectable(tile, this, Selectable.LIGHT_GREY,
-                Selectable.LIGHT_GREY, Selectable.GREY, Selectable.LIGHT_GREY);
+                Selectable.LIGHT_GREY, Selectable.GREY, Selectable.LIGHT_GREY, app);
         selectable.relocate(tile.getxReal(), tile.getyReal());
         selectable.setHighlightsNoHover();
         this.addToBoardGUI(selectable);
@@ -813,7 +864,7 @@ public class Game {
                 writer.close();
             }
         } catch (IOException ex) {
-            Logger.getLogger(ChessLite.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
         }
     } 
     
@@ -827,7 +878,7 @@ public class Game {
         } else {
             board.initBlackBoard(gameInfo.getBoardByNumber(gameInfo.getMoveNum()),this);
         }
-        AnchorPane.setTopAnchor(getBoardGUI(), TOP_BAR_HEIGHT + 20.0);
+        AnchorPane.setTopAnchor(getBoardGUI(), topBarHeight + 20.0);
         AnchorPane.setLeftAnchor(getBoardGUI(), 15.0);
         root.getChildren().add(getBoardGUI());
         preMove();
@@ -843,7 +894,7 @@ public class Game {
         } else {
             board.initWhiteBoard(gameInfo.getBoardByNumber(gameInfo.getMoveNum()),this);
         }
-        AnchorPane.setTopAnchor(getBoardGUI(), TOP_BAR_HEIGHT + 20.0);
+        AnchorPane.setTopAnchor(getBoardGUI(), topBarHeight + 20.0);
         AnchorPane.setLeftAnchor(getBoardGUI(), 15.0);
         root.getChildren().add(getBoardGUI());
         whiteBoardPosition = !whiteBoardPosition;
@@ -863,7 +914,7 @@ public class Game {
             } else {
                 board.initBlackBoard(gameInfo.getBeforeLastBoard(),this);
             }
-            AnchorPane.setTopAnchor(getBoardGUI(), TOP_BAR_HEIGHT + 20.0);
+            AnchorPane.setTopAnchor(getBoardGUI(), topBarHeight + 20.0);
             AnchorPane.setLeftAnchor(getBoardGUI(), 15.0);
             root.getChildren().add(getBoardGUI());
             gameInfo.takeBackMove();
@@ -893,7 +944,7 @@ public class Game {
             } else {
                 board.initBlackBoard(gameInfo.getBoardByNumber(gameInfo.getMoveNum()-1),this);
             }
-            AnchorPane.setTopAnchor(getBoardGUI(), TOP_BAR_HEIGHT + 20.0);
+            AnchorPane.setTopAnchor(getBoardGUI(), topBarHeight + 20.0);
             AnchorPane.setLeftAnchor(getBoardGUI(), 15.0);
             root.getChildren().add(getBoardGUI());
             gameInfo.goLeft();
@@ -915,7 +966,7 @@ public class Game {
             } else {
                 board.initBlackBoard(gameInfo.getBoardByNumber(gameInfo.getMoveNum()+1),this);
             }
-            AnchorPane.setTopAnchor(getBoardGUI(), TOP_BAR_HEIGHT + 20.0);
+            AnchorPane.setTopAnchor(getBoardGUI(), topBarHeight + 20.0);
             AnchorPane.setLeftAnchor(getBoardGUI(), 15.0);
             root.getChildren().add(getBoardGUI());
             gameInfo.goRight();            
@@ -938,7 +989,7 @@ public class Game {
             } else {
                 board.initBlackBoard(GameInfo.INITIAL_BOARD,this);
             }
-            AnchorPane.setTopAnchor(getBoardGUI(), TOP_BAR_HEIGHT + 20.0);
+            AnchorPane.setTopAnchor(getBoardGUI(), topBarHeight + 20.0);
             AnchorPane.setLeftAnchor(getBoardGUI(), 15.0);
             root.getChildren().add(getBoardGUI());
             gameInfo.goFarLeft();
@@ -961,7 +1012,7 @@ public class Game {
             } else {
                 board.initBlackBoard(gameInfo.getLastBoard(),this);
             }
-            AnchorPane.setTopAnchor(getBoardGUI(), TOP_BAR_HEIGHT + 20.0);
+            AnchorPane.setTopAnchor(getBoardGUI(), topBarHeight + 20.0);
             AnchorPane.setLeftAnchor(getBoardGUI(), 15.0);
             root.getChildren().add(getBoardGUI());
             gameInfo.goFarRight();            
@@ -985,7 +1036,7 @@ public class Game {
             } else {
                board.initBlackBoard(gameInfo.getBoardByNumber(num),this);
             }
-            AnchorPane.setTopAnchor(getBoardGUI(), TOP_BAR_HEIGHT + 20.0);
+            AnchorPane.setTopAnchor(getBoardGUI(), topBarHeight + 20.0);
             AnchorPane.setLeftAnchor(getBoardGUI(), 15.0);
             root.getChildren().add(getBoardGUI());
             gameInfo.goTo(num); 
@@ -1000,10 +1051,10 @@ public class Game {
      * Reset the game by constructing a new game of the same parameters 
      */
     public void resetGame() {
-        if(timerType == ChessLite.NO_TIMER) {
-            stage.getScene().setRoot(ChessLite.createPlayPane(stage));
+        if(timerType == NO_TIMER) {
+            stage.getScene().setRoot(app.createPlayPane(stage));
         } else {
-            stage.getScene().setRoot(ChessLite.createPlayPaneTimed(stage, TIMER_INFO[timerType][0], 
+            stage.getScene().setRoot(app.createPlayPaneTimed(stage, TIMER_INFO[timerType][0], 
                     TIMER_INFO[timerType][1],timerType));
         }
     }
@@ -1015,8 +1066,8 @@ public class Game {
     public HBox constructTopBorder() {
         HBox buttons = new HBox();
         buttons.setId("darkborder");
-        buttons.setMinSize(ChessLite.WIDTH,1);
-        buttons.setMaxSize(ChessLite.WIDTH,1);
+        buttons.setMinSize(app.getWidth(),1);
+        buttons.setMaxSize(app.getWidth(),1);
         return buttons;
     }
     
@@ -1032,8 +1083,8 @@ public class Game {
                 constructExportPGN(),constructExportFEN(),constructBorder(),
                 constructAppearanceButton());
         buttons.setSpacing(3);
-        buttons.setMinSize(ChessLite.WIDTH,TOP_BAR_HEIGHT);
-        buttons.setMaxSize(ChessLite.WIDTH,TOP_BAR_HEIGHT);
+        buttons.setMinSize(app.getWidth(),topBarHeight);
+        buttons.setMaxSize(app.getWidth(),topBarHeight);
         buttons.setPadding(new Insets(2,35,1,25));
         return buttons;
     }
@@ -1045,9 +1096,9 @@ public class Game {
     public HBox constructButtonPanel() {
         HBox buttons = new HBox();
         buttons.setId("topborder");
-        buttons.setMinSize(BAR_WIDTH,ELEMENT_HEIGHT);
-        buttons.setMaxSize(BAR_WIDTH,ELEMENT_HEIGHT);
-        buttons.setSpacing(25*ChessLite.SCALE);
+        buttons.setMinSize(barWidth,elementHeight);
+        buttons.setMaxSize(barWidth,elementHeight);
+        buttons.setSpacing(25*app.getScale());
         buttons.setAlignment(Pos.CENTER);
         buttons.getChildren().addAll(constructLeftButton(),
                 constructBackButton(),constructRightButton());
@@ -1060,12 +1111,12 @@ public class Game {
     */
     public HBox constructBorder() {
         HBox bordercontainer = new HBox();
-        bordercontainer.setMinSize(1+20,TOP_BAR_HEIGHT);
-        bordercontainer.setMaxSize(1+20,TOP_BAR_HEIGHT);
+        bordercontainer.setMinSize(1+20,topBarHeight);
+        bordercontainer.setMaxSize(1+20,topBarHeight);
         VBox border = new VBox();
         border.setId("sideborder");
-        border.setMinSize(1,TOP_BAR_HEIGHT-10);
-        border.setMaxSize(1,TOP_BAR_HEIGHT-10);
+        border.setMinSize(1,topBarHeight-10);
+        border.setMaxSize(1,topBarHeight-10);
         bordercontainer.setPadding(new Insets(1,10,1,10));
         bordercontainer.getChildren().addAll(border);
         return bordercontainer;
@@ -1078,13 +1129,12 @@ public class Game {
     public Button constructExportPGN() {
         Button exportButton = new Button("Save Game");
         ImageView image = new ImageView(new Image("/resources/filesymbol.png"));
-        image.setFitHeight(35*ChessLite.SCALE);
-        image.setFitWidth(35*ChessLite.SCALE);
+        image.setFitHeight(35*app.getScale());
+        image.setFitWidth(35*app.getScale());
         exportButton.setGraphic(image);
         exportButton.setGraphicTextGap(0);
-        exportButton.setFont(new Font("Roboto",16*ChessLite.SCALE));
-        exportButton.setMinSize(100*ChessLite.SCALE, 63*ChessLite.SCALE);
-        exportButton.setMaxSize(100*ChessLite.SCALE, 63*ChessLite.SCALE);
+        exportButton.setFont(new Font("Roboto",16*app.getScale()));
+        exportButton.setMinSize(100*app.getScale(), 63*app.getScale());
         exportButton.setFocusTraversable(false);
         exportButton.setId("barbutton");
         exportButton.setPadding(Insets.EMPTY);
@@ -1102,13 +1152,12 @@ public class Game {
     public Button constructExportFEN() {
         Button exportButton = new Button("Copy Board");
         ImageView image = new ImageView(new Image("/resources/filesymbol.png"));
-        image.setFitHeight(35*ChessLite.SCALE);
-        image.setFitWidth(35*ChessLite.SCALE);
+        image.setFitHeight(35*app.getScale());
+        image.setFitWidth(35*app.getScale());
         exportButton.setGraphic(image);
         exportButton.setGraphicTextGap(0);
-        exportButton.setFont(new Font("Roboto",16*ChessLite.SCALE));
-        exportButton.setMinSize(100*ChessLite.SCALE, 63*ChessLite.SCALE);
-        exportButton.setMaxSize(100*ChessLite.SCALE, 63*ChessLite.SCALE);
+        exportButton.setFont(new Font("Roboto",16*app.getScale()));
+        exportButton.setMinSize(100*app.getScale(), 63*app.getScale());
         exportButton.setFocusTraversable(false);
         exportButton.setId("barbutton");
         exportButton.setPadding(Insets.EMPTY);
@@ -1126,13 +1175,12 @@ public class Game {
     public Button constructFlipButton() {
         Button flipButton = new Button("Flip Board");
         ImageView image = new ImageView(new Image("/resources/blueflip.png"));
-        image.setFitHeight(35*ChessLite.SCALE);
-        image.setFitWidth(35*ChessLite.SCALE);
+        image.setFitHeight(35*app.getScale());
+        image.setFitWidth(35*app.getScale());
         flipButton.setGraphic(image);
         flipButton.setGraphicTextGap(0);
-        flipButton.setFont(new Font("Roboto",16*ChessLite.SCALE));
-        flipButton.setMinSize(80*ChessLite.SCALE, 63*ChessLite.SCALE);
-        flipButton.setMaxSize(80*ChessLite.SCALE, 63*ChessLite.SCALE);
+        flipButton.setFont(new Font("Roboto",16*app.getScale()));
+        flipButton.setMinSize(80*app.getScale(), 63*app.getScale());
         flipButton.setFocusTraversable(false);
         flipButton.setId("barbutton");
         flipButton.setPadding(Insets.EMPTY);
@@ -1150,13 +1198,12 @@ public class Game {
     public Button constructResetButton() {
         Button resetButton = new Button("Reset");
         ImageView image = new ImageView(new Image("/resources/greenflip.png"));
-        image.setFitHeight(35*ChessLite.SCALE);
-        image.setFitWidth(35*ChessLite.SCALE);
+        image.setFitHeight(35*app.getScale());
+        image.setFitWidth(35*app.getScale());
         resetButton.setGraphic(image);
         resetButton.setGraphicTextGap(0);
-        resetButton.setFont(new Font("Roboto",16*ChessLite.SCALE));
-        resetButton.setMinSize(73*ChessLite.SCALE, 63*ChessLite.SCALE);
-        resetButton.setMaxSize(73*ChessLite.SCALE, 63*ChessLite.SCALE);
+        resetButton.setFont(new Font("Roboto",16*app.getScale()));
+        resetButton.setMinSize(73*app.getScale(), 63*app.getScale());
         resetButton.setFocusTraversable(false);
         resetButton.setId("barbutton");
         resetButton.setPadding(Insets.EMPTY);
@@ -1174,19 +1221,18 @@ public class Game {
     public Button constructNewButton() {
         Button newButton = new Button("New");
         ImageView image = new ImageView(new Image("/resources/boardsparkle.png"));
-        image.setFitHeight(35*ChessLite.SCALE);
-        image.setFitWidth(35*ChessLite.SCALE);
+        image.setFitHeight(35*app.getScale());
+        image.setFitWidth(35*app.getScale());
         newButton.setGraphic(image);
         newButton.setGraphicTextGap(0);
-        newButton.setFont(new Font("Roboto",16*ChessLite.SCALE));
-        newButton.setMinSize(73*ChessLite.SCALE, 63*ChessLite.SCALE);
-        newButton.setMaxSize(73*ChessLite.SCALE, 63*ChessLite.SCALE);
+        newButton.setFont(new Font("Roboto",16*app.getScale()));
+        newButton.setMinSize(73*app.getScale(), 63*app.getScale());
         newButton.setFocusTraversable(false);
         newButton.setId("barbutton");
         newButton.setPadding(Insets.EMPTY);
         newButton.setContentDisplay(ContentDisplay.TOP);
         newButton.setOnAction((event)->{
-            ChessLite.newGame(stage);
+            app.newGame(stage);
         });
         return newButton;
     }
@@ -1198,19 +1244,18 @@ public class Game {
     public Button constructAppearanceButton() {
         Button newButton = new Button("Appearance");
         ImageView image = new ImageView(new Image("/resources/whitepawn.png"));
-        image.setFitHeight(35*ChessLite.SCALE);
-        image.setFitWidth(35*ChessLite.SCALE);
+        image.setFitHeight(35*app.getScale());
+        image.setFitWidth(35*app.getScale());
         newButton.setGraphic(image);
         newButton.setGraphicTextGap(0);
-        newButton.setFont(new Font("Roboto",16*ChessLite.SCALE));
-        newButton.setMinSize(90*ChessLite.SCALE, 63*ChessLite.SCALE);
-        newButton.setMaxSize(90*ChessLite.SCALE, 63*ChessLite.SCALE);
+        newButton.setFont(new Font("Roboto",16*app.getScale()));
+        newButton.setMinSize(90*app.getScale(), 63*app.getScale());
         newButton.setFocusTraversable(false);
         newButton.setId("barbutton");
         newButton.setPadding(Insets.EMPTY);
         newButton.setContentDisplay(ContentDisplay.TOP);
         newButton.setOnAction((event)->{
-            ChessLite.openAppearancePanel(stage, this);
+            app.openAppearancePanel(stage, this);
         });
         return newButton;
     }
@@ -1222,11 +1267,11 @@ public class Game {
     public Button constructLeftButton() {
         Button leftButton = new Button();
         ImageView image = new ImageView(new Image("/resources/leftarrow.png"));
-        image.setFitHeight(35*ChessLite.SCALE);
-        image.setFitWidth(35*ChessLite.SCALE);
+        image.setFitHeight(35*app.getScale());
+        image.setFitWidth(35*app.getScale());
         leftButton.setGraphic(image);
-        leftButton.setMinSize(50*ChessLite.SCALE, 50*ChessLite.SCALE);
-        leftButton.setMaxSize(50*ChessLite.SCALE, 50*ChessLite.SCALE);
+        leftButton.setMinSize(50*app.getScale(), 50*app.getScale());
+        leftButton.setMaxSize(50*app.getScale(), 50*app.getScale());
         leftButton.setFocusTraversable(false);
         leftButton.setId("boardbutton");
         leftButton.setOnAction((event)->{
@@ -1242,11 +1287,11 @@ public class Game {
     public Button constructRightButton() {
         Button rightButton = new Button();
         ImageView image = new ImageView(new Image("/resources/rightarrow.png"));
-        image.setFitHeight(35*ChessLite.SCALE);
-        image.setFitWidth(35*ChessLite.SCALE);
+        image.setFitHeight(35*app.getScale());
+        image.setFitWidth(35*app.getScale());
         rightButton.setGraphic(image);
-        rightButton.setMinSize(50*ChessLite.SCALE, 50*ChessLite.SCALE);
-        rightButton.setMaxSize(50*ChessLite.SCALE, 50*ChessLite.SCALE);
+        rightButton.setMinSize(50*app.getScale(), 50*app.getScale());
+        rightButton.setMaxSize(50*app.getScale(), 50*app.getScale());
         rightButton.setFocusTraversable(false);
         rightButton.setId("boardbutton");
         rightButton.setOnAction((event)->{
@@ -1259,54 +1304,14 @@ public class Game {
      * Construction of GUI Button component
      * @return Button to be returned
     */
-    public Button constructFarLeftButton() {
-        Button leftButton = new Button();
-        ImageView image = new ImageView(new Image("/resources/farleftarrow.png"));
-        image.setFitHeight(35*ChessLite.SCALE);
-        image.setFitWidth(35*ChessLite.SCALE);
-        leftButton.setGraphic(image);
-        leftButton.setMinSize(50*ChessLite.SCALE, 50*ChessLite.SCALE);
-        leftButton.setMaxSize(50*ChessLite.SCALE, 50*ChessLite.SCALE);
-        leftButton.setFocusTraversable(false);
-        leftButton.setId("boardbutton");
-        leftButton.setOnAction((event)->{
-            goFarLeft();
-        });
-        return leftButton;
-    }
-    
-    /**
-     * Construction of GUI Button component
-     * @return Button to be returned
-    */
-    public Button constructFarRightButton() {
-        Button rightButton = new Button();
-        ImageView image = new ImageView(new Image("/resources/farrightarrow.png"));
-        image.setFitHeight(35*ChessLite.SCALE);
-        image.setFitWidth(35*ChessLite.SCALE);
-        rightButton.setGraphic(image);
-        rightButton.setMinSize(50*ChessLite.SCALE, 50*ChessLite.SCALE);
-        rightButton.setMaxSize(50*ChessLite.SCALE, 50*ChessLite.SCALE);
-        rightButton.setFocusTraversable(false);
-        rightButton.setId("boardbutton");
-        rightButton.setOnAction((event)->{
-            goFarRight();
-        });
-        return rightButton;
-    }
-    
-    /**
-     * Construction of GUI Button component
-     * @return Button to be returned
-    */
     public Button constructBackButton() {
         Button backButton = new Button();
         ImageView image = new ImageView(new Image("/resources/arrowsmall.png"));
-        image.setFitHeight(25*ChessLite.SCALE);
-        image.setFitWidth(25*ChessLite.SCALE);
+        image.setFitHeight(25*app.getScale());
+        image.setFitWidth(25*app.getScale());
         backButton.setGraphic(image);
-        backButton.setMinSize(50*ChessLite.SCALE, 50*ChessLite.SCALE);
-        backButton.setMaxSize(50*ChessLite.SCALE, 50*ChessLite.SCALE);
+        backButton.setMinSize(50*app.getScale(), 50*app.getScale());
+        backButton.setMaxSize(50*app.getScale(), 50*app.getScale());
         backButton.setFocusTraversable(false);
         backButton.setId("boardbutton");
         backButton.setOnAction((event)->{
@@ -1322,15 +1327,15 @@ public class Game {
     public VBox constructScoreBoard() {
         VBox sidebar = new VBox();
         sidebar.setId("scoreoutsets");
-        sidebar.setMinSize(BAR_WIDTH, ELEMENT_HEIGHT + SCOREBOARD_HEIGHT + ELEMENT_HEIGHT);
-        sidebar.setMaxSize(BAR_WIDTH, ELEMENT_HEIGHT + SCOREBOARD_HEIGHT + ELEMENT_HEIGHT);
+        sidebar.setMinSize(barWidth, elementHeight + scoreBoardHeight + elementHeight);
+        sidebar.setMaxSize(barWidth, elementHeight + scoreBoardHeight + elementHeight);
         sidebar.setAlignment(Pos.CENTER);
         HBox titles = constructTitles();
         HBox bottombuttons = constructButtonPanel();
         setUpNotationGUI();
         HBox notationHBox = new HBox();
         notationHBox.getChildren().add(notationTable);
-        notationHBox.setPadding(new Insets(0,BAR_WIDTH*0.125,0,BAR_WIDTH*0.125));
+        notationHBox.setPadding(new Insets(0,barWidth*0.1,0,barWidth*0.1));
         sidebar.getChildren().addAll(titles,notationHBox,bottombuttons);
         return sidebar;
     }
@@ -1345,16 +1350,16 @@ public class Game {
      */
     public final NotationBoard constructNotationTable() {
         VBox vertical = new VBox();
-        NotationBoard table = new NotationBoard(gameInfo.getMoves(), vertical, this);
+        NotationBoard table = new NotationBoard(gameInfo.getMoves(), vertical, this, app);
         table.setId("scrollborder");
         table.setFocusTraversable(false);
-        double width = BAR_WIDTH*0.75;
+        double width = barWidth*0.8;
         vertical.setId("scrollpanebg");
-        vertical.setPadding(new Insets(25,25*ChessLite.SCALE,25,25*ChessLite.SCALE));
+        vertical.setPadding(new Insets(25,20*app.getScale(),25,20*app.getScale()));
         vertical.setFocusTraversable(false);
         table.setContent(vertical);
-        table.setMinSize(width, SCOREBOARD_HEIGHT);
-        table.setMaxSize(width, SCOREBOARD_HEIGHT);
+        table.setMinSize(width, scoreBoardHeight);
+        table.setMaxSize(width, scoreBoardHeight);
         table.hbarPolicyProperty().setValue(ScrollPane.ScrollBarPolicy.NEVER);
         table.vbarPolicyProperty().setValue(ScrollPane.ScrollBarPolicy.AS_NEEDED);
         table.fitToWidthProperty().set(true);
@@ -1368,20 +1373,20 @@ public class Game {
     */
     public final HBox constructTitles() {
         HBox titles = new HBox();
-        titles.setMinSize(BAR_WIDTH, ELEMENT_HEIGHT);
-        titles.setMaxSize(BAR_WIDTH, ELEMENT_HEIGHT);
+        titles.setMinSize(barWidth, elementHeight);
+        titles.setMaxSize(barWidth, elementHeight);
         Label white = new Label(" White");
-        white.setFont(new Font("Roboto", 26*ChessLite.SCALE));
+        white.setFont(new Font("Roboto", 26*app.getScale()));
         white.setAlignment(Pos.CENTER);
-        white.setMinSize(BAR_WIDTH/2, ELEMENT_HEIGHT);
-        white.setMaxSize(BAR_WIDTH/2, ELEMENT_HEIGHT);
+        white.setMinSize(barWidth/2, elementHeight);
+        white.setMaxSize(barWidth/2, elementHeight);
         white.setId("lightborderright");
         white.setGraphic(whiteCirc);
         Label black = new Label(" Black");
-        black.setFont(new Font("Roboto", 26*ChessLite.SCALE));
+        black.setFont(new Font("Roboto", 26*app.getScale()));
         black.setAlignment(Pos.CENTER);
-        black.setMinSize(BAR_WIDTH/2, ELEMENT_HEIGHT);
-        black.setMaxSize(BAR_WIDTH/2, ELEMENT_HEIGHT);
+        black.setMinSize(barWidth/2, elementHeight);
+        black.setMaxSize(barWidth/2, elementHeight);
         black.setId("lightborderleft");
         black.setGraphic(blackCirc);
         titles.getChildren().addAll(white, black);

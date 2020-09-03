@@ -19,6 +19,7 @@ import javafx.scene.text.FontPosture;
  */
 public class NotationBoard extends ScrollPane{
     
+    private final ChessLite app;
     private final Game game; //controller to redirect flow
     private final ArrayList<Move> movedata;
     private final VBox movegui;
@@ -30,14 +31,16 @@ public class NotationBoard extends ScrollPane{
      * @param movesIn, moves to be rendered on GUI
      * @param verticalIn, GUI to update
      * @param gameIn, controller to redirect flow 
+     * @param app, object for application
      */
-    public NotationBoard(ArrayList<Move> movesIn, VBox verticalIn, Game gameIn) {
+    public NotationBoard(ArrayList<Move> movesIn, VBox verticalIn, Game gameIn, ChessLite app) {
         moves = new ArrayList<>();
         movedata = movesIn;
         movegui = verticalIn;
         game = gameIn;
         setVvalue(1.0);     
         movegui.heightProperty().addListener(observable -> setVvalue(1D));
+        this.app = app;
     }
     
     /**
@@ -46,10 +49,10 @@ public class NotationBoard extends ScrollPane{
      */
     public void addFinishedMessage(String msg) {
         msglbl = new Label(msg);
-        msglbl.setPadding(new Insets(10 * ChessLite.SCALE,0,10 * ChessLite.SCALE,0));
-        msglbl.setFont(Font.font("Roboto", FontPosture.ITALIC, 22 * ChessLite.SCALE));
-        msglbl.setMinSize(((Game.BAR_WIDTH*0.65)-(ChessLite.SCALE*25)), 58 * ChessLite.SCALE);
-        msglbl.setMaxSize(((Game.BAR_WIDTH*0.65)-(ChessLite.SCALE*25)), 58 * ChessLite.SCALE);
+        msglbl.setPadding(new Insets(10 * app.getScale(),0,10 * app.getScale(),0));
+        msglbl.setFont(Font.font("Roboto", FontPosture.ITALIC, 22 * app.getScale()));
+        msglbl.setMinSize(((game.getBarWidth()*0.65)-(app.getScale()*25)), 58 * app.getScale());
+        msglbl.setMaxSize(((game.getBarWidth()*0.65)-(app.getScale()*25)), 58 * app.getScale());
         msglbl.setWrapText(true);
         msglbl.setAlignment(Pos.CENTER);
         movegui.getChildren().add(msglbl);
@@ -73,15 +76,16 @@ public class NotationBoard extends ScrollPane{
         if (lastIndex % 2 == 0) {
             HBox move = new HBox();
             Label numlbl = new Label(Integer.toString(moves.size() + 1) + ". ");
-            numlbl.setFont(new Font("Roboto", 22*ChessLite.SCALE));
-            numlbl.setMinSize((40*ChessLite.SCALE), 38*ChessLite.SCALE);
-            numlbl.setMaxSize((40*ChessLite.SCALE), 38*ChessLite.SCALE);
+            numlbl.setAlignment(Pos.CENTER);
+            numlbl.setFont(new Font("Roboto", 22*app.getScale()));
+            numlbl.setMinSize((50*app.getScale()), 38*app.getScale());
+            numlbl.setMaxSize((50*app.getScale()), 38*app.getScale());
             Label plylbl = new Label(ply);
-            plylbl.setFont(new Font("Roboto", 22*ChessLite.SCALE));
+            plylbl.setFont(new Font("Roboto", 22*app.getScale()));
             plylbl.setId("ply");
-            plylbl.setPadding(new Insets(0,0,0,10));
-            plylbl.setMinSize((90*ChessLite.SCALE), 38*ChessLite.SCALE);
-            plylbl.setMaxSize((90*ChessLite.SCALE), 38*ChessLite.SCALE);
+            plylbl.setPadding(new Insets(0,0,0,10*app.getScale()));
+            plylbl.setMinSize((90*app.getScale()), 38*app.getScale());
+            plylbl.setMaxSize((90*app.getScale()), 38*app.getScale());
             plylbl.setOnMouseClicked((event)->{
                 game.goTo(lastIndex);
             });
@@ -90,11 +94,11 @@ public class NotationBoard extends ScrollPane{
             moves.add(move);
         } else {
             Label plylbl = new Label(ply);
-            plylbl.setFont(new Font("Roboto", 22*ChessLite.SCALE));
+            plylbl.setFont(new Font("Roboto", 22*app.getScale()));
             plylbl.setId("ply");
             plylbl.setPadding(new Insets(0,0,0,10));
-            plylbl.setMinSize((90*ChessLite.SCALE), 38*ChessLite.SCALE);
-            plylbl.setMaxSize((90*ChessLite.SCALE), 38*ChessLite.SCALE);
+            plylbl.setMinSize((90*app.getScale()), 38*app.getScale());
+            plylbl.setMaxSize((90*app.getScale()), 38*app.getScale());
             plylbl.setOnMouseClicked((event)->{
                 game.goTo(lastIndex);
             });

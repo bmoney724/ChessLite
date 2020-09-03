@@ -476,7 +476,7 @@ public class Board {
                 tiles[i][j] = tile;
                 boardUI.getChildren().add(tile);
                 isLight = !isLight;
-                Piece piece = NOTATION_TO_CONSTRUCTOR_TABLE[board[i][j]].createPiece(tiles[i][j]);
+                Piece piece = NOTATION_TO_CONSTRUCTOR_TABLE[board[i][j]].createPiece(tiles[i][j],game.getApp().getPath());
                 if(piece != null) {
                     if(piece.isWhite()) {
                         if(piece.isKing()) {
@@ -535,7 +535,7 @@ public class Board {
                 tiles[i][j] = tile;
                 boardUI.getChildren().add(tile);
                 IsLight = !IsLight;
-                Piece piece = NOTATION_TO_CONSTRUCTOR_TABLE[board[i][j]].createPiece(tiles[i][j]);
+                Piece piece = NOTATION_TO_CONSTRUCTOR_TABLE[board[i][j]].createPiece(tiles[i][j],game.getApp().getPath());
                 if(piece != null) {
                     if(piece.isWhite()) {
                         if(piece.isKing()) {

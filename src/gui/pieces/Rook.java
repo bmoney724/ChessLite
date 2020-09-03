@@ -4,7 +4,6 @@
  */
 package gui.pieces;
 
-import gui.ChessLite;
 import gui.Game;
 import gui.Piece;
 import gui.Tile;
@@ -31,27 +30,34 @@ public final class Rook extends Piece{
      * O    O    O    X    O    O    O    O 
      */
     
-    public final String WHITE_ROOK = "/resources/" + ChessLite.PATH + "/whiterook.png";
-    public final String BLACK_ROOK = "/resources/" + ChessLite.PATH + "/blackrook.png";
+    public String whiteRook;
+    public String blackRook;
+    
+    public final void setPaths(String path) {
+        whiteRook = "/resources/" + path + "/whiterook.png";
+        blackRook = "/resources/" + path + "/blackrook.png";
+    }
     
     /**
      * Constructs a Rook
      * 
      * @param isWhite side of the piece
      * @param tile tile piece belongs to
+     * @param path for image
     */
-    public Rook(boolean isWhite, Tile tile) {
+    public Rook(boolean isWhite, Tile tile, String path) {
         super(isWhite, tile);
+        setPaths(path);
         Image image;
         if(isWhite) {
-            image = new Image(WHITE_ROOK);
+            image = new Image(whiteRook);
             
         } else {
-            image = new Image(BLACK_ROOK);
+            image = new Image(blackRook);
         }
         ImageView imageView = new ImageView(image);
-        imageView.setFitHeight(TILE_SIZE);
-        imageView.setFitWidth(TILE_SIZE);
+        imageView.setFitHeight(tileSize);
+        imageView.setFitWidth(tileSize);
         this.getChildren().add(imageView);
     }
     

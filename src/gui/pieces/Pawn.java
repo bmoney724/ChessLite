@@ -4,7 +4,6 @@
  */
 package gui.pieces;
 
-import gui.ChessLite;
 import gui.GameInfo;
 import gui.Game;
 import gui.Move;
@@ -40,26 +39,33 @@ public final class Pawn extends Piece{
     private final ArrayList<Tile> avaliableEnPassant = new ArrayList<>();
     private final ArrayList<Tile> avaliablePromotion = new ArrayList<>();
     
-    public final String WHITE_PAWN = "/resources/" + ChessLite.PATH + "/whitepawn.png";
-    public final String BLACK_PAWN = "/resources/" + ChessLite.PATH + "/blackpawn.png";
+    public String whitePawn;
+    public String blackPawn;
+    
+    public final void setPaths(String path) {
+        whitePawn = "/resources/" + path + "/whitepawn.png";
+        blackPawn = "/resources/" + path + "/blackpawn.png";
+    }
     
     /**
      * Constructs a Pawn
      * 
      * @param isWhite side of the piece
      * @param tile tile piece belongs to
+     * @param path, path for image
     */
-    public Pawn(boolean isWhite, Tile tile) {
+    public Pawn(boolean isWhite, Tile tile, String path) {
         super(isWhite, tile);
+        setPaths(path);
         Image image;
         if(isWhite) {
-            image = new Image(WHITE_PAWN);
+            image = new Image(whitePawn);
         } else {
-            image = new Image(BLACK_PAWN);
+            image = new Image(blackPawn);
         }
         ImageView imageView = new ImageView(image);
-        imageView.setFitHeight(TILE_SIZE);
-        imageView.setFitWidth(TILE_SIZE);
+        imageView.setFitHeight(tileSize);
+        imageView.setFitWidth(tileSize);
         this.getChildren().add(imageView);
     }
 

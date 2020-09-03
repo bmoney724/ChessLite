@@ -23,7 +23,7 @@ public abstract class Piece extends StackPane {
      * This Piece - other symbol 
      */
     
-    public static final double TILE_SIZE = 100*ChessLite.SCALE;
+    public double tileSize;
     private boolean closeable = false; //will a mouse release close the piece
     private boolean drag; //is the piece currently being dragged
     private double mouseX, mouseY; //position of mouse
@@ -33,6 +33,14 @@ public abstract class Piece extends StackPane {
     private Tile tile; //tile piece is on
     private final ArrayList<Tile> avaliable = new ArrayList<>(); //avaliable tiles of piece used for render
 
+    public double getTileSize() {
+        return tileSize;
+    }
+
+    private void setTileSize(double scale) {
+        this.tileSize = 100*scale;
+    }
+    
     public boolean isCloseable() {
         return closeable;
     }
@@ -114,6 +122,7 @@ public abstract class Piece extends StackPane {
         this.setStyle("-fx-cursor: hand;");
         isWhite = isWhiteIn;
         tile = tileIn;
+        setTileSize(tile.getController().getApp().getScale());        
         moveTo(tile);
         setOnMousePressed(e -> {
             doRender();
@@ -133,8 +142,8 @@ public abstract class Piece extends StackPane {
                     mouseX = e.getSceneX();
                     mouseY = e.getSceneY();
                     Bounds pieceBounds = this.localToScene(this.getBoundsInLocal());
-                    double x = e.getSceneX() - (pieceBounds.getMinX() + (Tile.TILE_SIZE / 2)) + oldX;
-                    double y = e.getSceneY() - (pieceBounds.getMinY() + (Tile.TILE_SIZE / 2)) + oldY;
+                    double x = e.getSceneX() - (pieceBounds.getMinX() + (tile.getTileSize() / 2)) + oldX;
+                    double y = e.getSceneY() - (pieceBounds.getMinY() + (tile.getTileSize() / 2)) + oldY;
                     initialX = x;
                     initialY = y;
                     setTranslateX(x);
@@ -219,7 +228,7 @@ public abstract class Piece extends StackPane {
         double x = tile.getxReal() - oldX;
         double y = tile.getyReal() - oldY;
         int time = 150;
-        if(distance(x,y) < ((double)Tile.TILE_SIZE)/2) {
+        if(distance(x,y) < ((double)tile.getTileSize())/2) {
             time = 5;
         }
         TranslateTransition tt = new TranslateTransition(Duration.millis(time), this);
