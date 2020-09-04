@@ -68,7 +68,7 @@ public class ChessLite extends Application {
     private final double scale = height/960;
     private final AudioClipPlayer clip = new AudioClipPlayer(SOUND_CLIP_PATH); //sound clip
     private String path = "alpha"; //path for piece package
-    private int colorTheme = 2; //color theme
+    private int colorTheme = GREEN; //color theme
 
     public AudioClipPlayer getClip() {
         return clip;
