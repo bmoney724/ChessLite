@@ -5,12 +5,13 @@
 package gui.pieces;
 
 import gui.Game;
+import gui.GameInfo;
 import gui.Piece;
 import gui.Tile;
-import java.util.ArrayList;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import gui.GameInfo;
+
+import java.util.ArrayList;
 
 /**
  *
@@ -30,7 +31,7 @@ public final class King extends Piece{
      * O    O    O    O    O    O    O    O 
      */
     
-    private final ArrayList<Tile> avaliableCastle = new ArrayList<>();
+    private final ArrayList<Tile> availableCastle = new ArrayList<>();
     
     public String whiteKing;
     public String blackKing;
@@ -63,16 +64,14 @@ public final class King extends Piece{
     }
 
     @Override
-    public void pieceAvaliableMoves() {
-        avaliableCastle.clear();
+    public void pieceAvailableMoves() {
+        availableCastle.clear();
         Game controller = getController();
         Tile[][] tiles = controller.getTiles();
         int row = getTile().getRow();
         int col = getTile().getCol();
-        ArrayList<Tile> avaliable = getAvaliable();
-        controller.kingMoves().forEach((Tile tile) -> {
-            avaliable.add(tile);
-        });
+        ArrayList<Tile> available = getAvailable();
+        available.addAll(controller.kingMoves());
         
         //castle
         int bottomRow = isWhite() ? 0 : 7;
@@ -83,7 +82,7 @@ public final class King extends Piece{
                     && !tiles[row][col+1].hasPiece() && !tiles[row][col+2].hasPiece()
                     && rookTile.hasPiece() && rookTile.getPiece().isRook()
                     && controller.canCastle(this, true)) {
-                avaliableCastle.add(tiles[row][col+2]);
+                availableCastle.add(tiles[row][col+2]);
             }
             rookTile = tiles[row][col-4];
             if (controller.getAttackingKing().isEmpty()
@@ -91,22 +90,20 @@ public final class King extends Piece{
                     && !tiles[row][col-1].hasPiece() && !tiles[row][col-2].hasPiece()
                     && rookTile.hasPiece() && rookTile.getPiece().isRook()
                     && controller.canCastle(this, false)) {
-                avaliableCastle.add(tiles[row][col-2]);
+                availableCastle.add(tiles[row][col-2]);
             }
         }
     }
     
     @Override
-    public void pieceAvaliableMoves(ArrayList<Tile> whiteList) {
-        avaliableCastle.clear();
+    public void pieceAvailableMoves(ArrayList<Tile> whiteList) {
+        availableCastle.clear();
         Game controller = getController();
         Tile[][] tiles = controller.getTiles();
         int row = getTile().getRow();
         int col = getTile().getCol();
-        ArrayList<Tile> avaliable = getAvaliable();
-        controller.kingMoves().forEach((Tile tile) -> {
-            avaliable.add(tile);
-        });
+        ArrayList<Tile> available = getAvailable();
+        available.addAll(controller.kingMoves());
         
         //castle
         int bottomRow = isWhite() ? 0 : 7;
@@ -117,7 +114,7 @@ public final class King extends Piece{
                     && !tiles[row][col+1].hasPiece() && !tiles[row][col+2].hasPiece()
                     && rookTile.hasPiece() && rookTile.getPiece().isRook()
                     && controller.canCastle(this, true)) {
-                avaliableCastle.add(tiles[row][col+2]);
+                availableCastle.add(tiles[row][col+2]);
             } 
             rookTile = tiles[row][col-4];
             if (controller.getAttackingKing().isEmpty()
@@ -125,32 +122,30 @@ public final class King extends Piece{
                     && !tiles[row][col-1].hasPiece() && !tiles[row][col-2].hasPiece()
                     && rookTile.hasPiece() && rookTile.getPiece().isRook()
                     && controller.canCastle(this, false)) {
-                avaliableCastle.add(tiles[row][col-2]);
+                availableCastle.add(tiles[row][col-2]);
             }
         }
     }
     
     /**
-     * Overrides render method to include avaliable tiles for Castling
+     * Overrides render method to include available tiles for Castling
      */
     @Override
-    protected void renderSelectables() {
-        super.renderSelectables();
-        avaliableCastle.forEach((avaliableTile) -> {
-            boolean kingSide = avaliableTile.getCol() > 4;
-            getController().addCastleSelectable(avaliableTile, isWhite(), kingSide);
+    protected void renderSelectable() {
+        super.renderSelectable();
+        availableCastle.forEach((availableTile) -> {
+            boolean kingSide = availableTile.getCol() > 4;
+            getController().addCastleSelectable(availableTile, isWhite(), kingSide);
         });
     }
     
     /**
-     * Overrides render method to include avaliable tiles for Castling
+     * Overrides render method to include available tiles for Castling
      */
     @Override
-    protected void renderVisualizables() {
-        super.renderVisualizables();
-        avaliableCastle.forEach((avaliableTile) -> {
-            getController().addVisualizable(avaliableTile);
-        });
+    protected void renderVisualize() {
+        super.renderVisualize();
+        availableCastle.forEach((availableTile) -> getController().addVisualize(availableTile));
     }
     
     @Override

@@ -47,7 +47,7 @@ public class Selectable extends Pane {
     public static final Color LIGHT_GREY = Color.rgb(110,110,110,0.5); 
     private final Tile tile;
     private final Game controller;
-    private final Circle nopiece;
+    private final Circle noPiece;
     private final Rectangle rec;
     private final Shape shape;
     private final Shape crown;
@@ -96,18 +96,18 @@ public class Selectable extends Pane {
         this.controller = controller;
         this.tile = tile;
         
-        nopiece = new Circle();
-        nopiece.setRadius(selectableSize);
-        nopiece.setFill(solid);
-        nopiece.setLayoutX(tileSize / 2);
-        nopiece.setLayoutY(tileSize / 2);
+        noPiece = new Circle();
+        noPiece.setRadius(selectableSize);
+        noPiece.setFill(solid);
+        noPiece.setLayoutX(tileSize / 2);
+        noPiece.setLayoutY(tileSize / 2);
 
         Rectangle rect = new Rectangle(0, 0, tileSize, tileSize);
-        Circle circ = new Circle(tileSize / 2, tileSize / 2, Math.min(tileSize, tileSize) / 2);
-        shape = Shape.subtract(rect, circ);
+        Circle round = new Circle(tileSize / 2, tileSize / 2, (tileSize) / 2);
+        shape = Shape.subtract(rect, round);
         shape.setFill(ring);
        
-        crown = Shape.subtract(rect, circ);
+        crown = Shape.subtract(rect, round);
         crown.setFill(castle);
         
         rec = new Rectangle();
@@ -141,14 +141,14 @@ public class Selectable extends Pane {
     }
     
     public void setHasNoPieceHover() {
-        getChildren().add(nopiece);
+        getChildren().add(noPiece);
         setOnMouseEntered(e -> {
             tile.getChildren().add(rec);
-            getChildren().remove(nopiece);
+            getChildren().remove(noPiece);
         });
         setOnMouseExited(e -> {
             tile.getChildren().remove(rec);
-            getChildren().add(nopiece);
+            getChildren().add(noPiece);
         });
     }
     
@@ -165,7 +165,7 @@ public class Selectable extends Pane {
     }
     
     public void setHasNoPiece() {
-        getChildren().add(nopiece);
+        getChildren().add(noPiece);
     }
     
     public void setHasPiece() {
@@ -224,62 +224,62 @@ public class Selectable extends Pane {
         queen.setId("promotionbutton");
         queen.setFocusTraversable(false);
         queen.setOnAction((event) -> {
-            Stage thestage = (Stage) queen.getScene().getWindow();
+            Stage theStage = (Stage) queen.getScene().getWindow();
             app.getClip().play();
             controller.makeMovePromotion(tile, new Queen(isWhite, tile, app.getPath()));
-            controller.clearSelectables();
-            thestage.close();
+            controller.clearSelectable();
+            theStage.close();
         });
-        ImageView queenimg = new ImageView(new Image(getClass().getResourceAsStream(isWhite ?
+        ImageView queenImg = new ImageView(new Image(getClass().getResourceAsStream(isWhite ?
                 whiteQueen : blackQueen)));
-        queenimg.setFitHeight(80*app.getScale());
-        queenimg.setFitWidth(80*app.getScale());
-        queen.setGraphic(queenimg);
+        queenImg.setFitHeight(80*app.getScale());
+        queenImg.setFitWidth(80*app.getScale());
+        queen.setGraphic(queenImg);
         Button knight = new Button();
         knight.setId("promotionbutton");
         knight.setFocusTraversable(false);
         knight.setOnAction((event) -> {
-            Stage thestage = (Stage) knight.getScene().getWindow();
+            Stage theStage = (Stage) knight.getScene().getWindow();
             app.getClip().play();
             controller.makeMovePromotion(tile, new Knight(isWhite, tile, app.getPath()));
-            controller.clearSelectables();
-            thestage.close();
+            controller.clearSelectable();
+            theStage.close();
         });
-        ImageView knightimg = new ImageView(new Image(getClass().getResourceAsStream(isWhite ?
+        ImageView knightImg = new ImageView(new Image(getClass().getResourceAsStream(isWhite ?
                 whiteKnight : blackKnight)));
-        knightimg.setFitHeight(80*app.getScale());
-        knightimg.setFitWidth(80*app.getScale());
-        knight.setGraphic(knightimg);
+        knightImg.setFitHeight(80*app.getScale());
+        knightImg.setFitWidth(80*app.getScale());
+        knight.setGraphic(knightImg);
         Button rook = new Button();
         rook.setId("promotionbutton");
         rook.setFocusTraversable(false);
         rook.setOnAction((event) -> {
-            Stage thestage = (Stage)rook.getScene().getWindow();
+            Stage theStage = (Stage)rook.getScene().getWindow();
             app.getClip().play();
             controller.makeMovePromotion(tile, new Rook(isWhite, tile, app.getPath()));
-            controller.clearSelectables();
-            thestage.close();
+            controller.clearSelectable();
+            theStage.close();
         });
-        ImageView rookimg = new ImageView(new Image(getClass().getResourceAsStream(isWhite ?
+        ImageView rookImg = new ImageView(new Image(getClass().getResourceAsStream(isWhite ?
                 whiteRook : blackRook)));
-        rookimg.setFitHeight(80*app.getScale());
-        rookimg.setFitWidth(80*app.getScale());
-        rook.setGraphic(rookimg);
+        rookImg.setFitHeight(80*app.getScale());
+        rookImg.setFitWidth(80*app.getScale());
+        rook.setGraphic(rookImg);
         Button bishop = new Button();
         bishop.setId("promotionbutton");
         bishop.setFocusTraversable(false);
         bishop.setOnAction((event) -> {
-            Stage thestage = (Stage) bishop.getScene().getWindow();
+            Stage theStage = (Stage) bishop.getScene().getWindow();
             app.getClip().play();
             controller.makeMovePromotion(tile, new Bishop(isWhite, tile, app.getPath()));
-            controller.clearSelectables();
-            thestage.close();
+            controller.clearSelectable();
+            theStage.close();
         });
-        ImageView bishopimg = new ImageView(new Image(getClass().getResourceAsStream(isWhite ?
+        ImageView bishopImg = new ImageView(new Image(getClass().getResourceAsStream(isWhite ?
                 whiteBishop : blackBishop)));
-        bishopimg.setFitHeight(80*app.getScale());
-        bishopimg.setFitWidth(80*app.getScale());
-        bishop.setGraphic(bishopimg);
+        bishopImg.setFitHeight(80*app.getScale());
+        bishopImg.setFitWidth(80*app.getScale());
+        bishop.setGraphic(bishopImg);
         
         buttons.getChildren().addAll(queen,knight);
         buttons1.getChildren().addAll(rook,bishop);
@@ -298,7 +298,7 @@ public class Selectable extends Pane {
         newWindow.setResizable(false);
         newWindow.setOnCloseRequest((event)->{
             controller.getSelectedTile().getPiece().moveTo(controller.getSelectedTile());
-            controller.clearSelectables();
+            controller.clearSelectable();
         });
 
         newWindow.setX(scene.getWindow().getX() + scene.getWindow().getWidth()/4.5);

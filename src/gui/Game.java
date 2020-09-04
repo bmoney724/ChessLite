@@ -1,20 +1,10 @@
 /*
- * A Controller class to manage the current Game's gameflow and GUI
+ * A Controller class to manage the current Game's game flow and GUI
  * A core assumption is that the Board starts from the legal starting position
  * 7/3/20
  */
 package gui;
 
-import java.awt.Toolkit;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.StringSelection;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.animation.FadeTransition;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
@@ -39,6 +29,17 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author Joseph
@@ -52,16 +53,16 @@ public class Game {
     
     public static final Color GREEN = Color.rgb(85,107,47,0.7);
     public static final Color RED = Color.rgb(128,0,0,0.7);
-    public static int IN_PROGRESS = 0;
-    public static int CHECKMATE = 1;
-    public static int STALEMATE = 2;
+    public static final int IN_PROGRESS = 0;
+    public static final int CHECKMATE = 1;
+    public static final int STALEMATE = 2;
     public static final int NO_TIMER = -1;
     
     private double boardSize;
     private double elementHeight;
     private double scoreBoardHeight;
     private double topBarHeight;
-    private double tilesize; //calculate GUI sizes based of ChessLite application scale
+    private double tileSize; //calculate GUI sizes based of ChessLite application scale
     private double barWidth;
     private double barHeight;
     
@@ -72,13 +73,13 @@ public class Game {
     
     private VBox sideBar;
     private NotationBoard notationTable;
-    private final Circle whiteCirc;
-    private final Circle blackCirc;
+    private final Circle whiteCircle;
+    private final Circle blackCircle;
     private final AnchorPane root;
     private final Stage stage;
     
     private Tile selectedTile; //the current selected tile all moves are relative to this tile
-    private final ArrayList<Selectable> selectables = new ArrayList<>(); //all active selectables 
+    private final ArrayList<Selectable> selectable = new ArrayList<>(); //all active selectable
     private final ArrayList<Tile> highlightedTiles = new ArrayList<>();
     private boolean whiteBoardPosition;
     private boolean inCheck = false;
@@ -88,7 +89,7 @@ public class Game {
     private boolean canRender = true;
     private int gameResult = IN_PROGRESS;
     private int timerType = NO_TIMER;
-    public static final int[][] TIMER_INFO = {{30*60,20},{15*60,10},{3*60,2},{1*60,0}};
+    public static final int[][] TIMER_INFO = {{30*60,20},{15*60,10},{3*60,2},{60,0}};
 
     /**
      * Constructs a new Game belonging to a stage
@@ -98,10 +99,10 @@ public class Game {
      */
     protected Game(boolean whiteStart, Stage stageIn, ChessLite app) {
         setApp(app);
-        whiteCirc = new Circle();
-        blackCirc = new Circle();
-        whiteCirc.setRadius(8*app.getScale());
-        blackCirc.setRadius(8*app.getScale());
+        whiteCircle = new Circle();
+        blackCircle = new Circle();
+        whiteCircle.setRadius(8*app.getScale());
+        blackCircle.setRadius(8*app.getScale());
         whiteBoardPosition = whiteStart;
         root = new AnchorPane();
         stage = stageIn;
@@ -118,7 +119,7 @@ public class Game {
      * @param app, the application object
      * @return constructed game
      */
-    public static final Game constructGame(boolean whiteStart, Stage stageIn, ChessLite app) {
+    public static Game constructGame(boolean whiteStart, Stage stageIn, ChessLite app) {
         Game game = new Game(whiteStart, stageIn, app);
         game.initBoard(whiteStart);
         game.initRoot();
@@ -157,12 +158,12 @@ public class Game {
     
     private void setApp(ChessLite app) {
         this.app = app;
-        tilesize = 100*app.getScale(); //calculate GUI sizes based of ChessLite application scale
-        boardSize = tilesize * HEIGHT;
+        tileSize = 100*app.getScale(); //calculate GUI sizes based of ChessLite application scale
+        boardSize = tileSize * HEIGHT;
         elementHeight = 80*app.getScale();
         scoreBoardHeight = 275*app.getScale();
         topBarHeight = 70*app.getScale();
-        barWidth = (app.getWidth() - 110 - HEIGHT*tilesize);
+        barWidth = (app.getWidth() - 110 - HEIGHT* tileSize);
         barHeight = app.getScale()*(app.getHeight()/1.5);
     }
 
@@ -178,8 +179,8 @@ public class Game {
         return topBarHeight;
     }
 
-    public double getTilesize() {
-        return tilesize;
+    public double getTileSize() {
+        return tileSize;
     }
 
     public double getBarWidth() {
@@ -258,8 +259,8 @@ public class Game {
         this.moveReadyState = moveReadyState;
     }
     
-    public ArrayList<Selectable> getSelectables() {
-        return selectables;
+    public ArrayList<Selectable> getSelectable() {
+        return selectable;
     }
 
     public VBox getSideBar() {
@@ -325,13 +326,13 @@ public class Game {
             public void move() {
                 app.getClip().play();
                 makeMove(tile);
-                clearSelectables();
+                clearSelectable();
             }
         };
-        selectable.relocate(tile.getxReal(), tile.getyReal());
+        selectable.relocate(tile.getXReal(), tile.getYReal());
         selectable.setHighlightsNoHover();
         this.addToBoardGUI(selectable);
-        selectables.add(selectable);
+        this.selectable.add(selectable);
     }
     
      /**
@@ -346,13 +347,13 @@ public class Game {
             public void move() {
                 app.getClip().play();
                 makeMoveEnPassant(tile, offset);
-                clearSelectables();
+                clearSelectable();
             }
         };
-        selectable.relocate(tile.getxReal(), tile.getyReal());
+        selectable.relocate(tile.getXReal(), tile.getYReal());
         selectable.setHighlightsNoHover();
         this.addToBoardGUI(selectable);
-        selectables.add(selectable);
+        this.selectable.add(selectable);
     }
     
      /**
@@ -368,10 +369,10 @@ public class Game {
                 promotionSelection(isWhite,app);
             }
         };
-        selectable.relocate(tile.getxReal(), tile.getyReal());
+        selectable.relocate(tile.getXReal(), tile.getYReal());
         selectable.setHighlightsNoHover();
         this.addToBoardGUI(selectable);
-        selectables.add(selectable);
+        this.selectable.add(selectable);
     }
     
      /**
@@ -388,26 +389,26 @@ public class Game {
             public void move() {
                 app.getClip().play();
                 makeMoveCastle(forWhite, kingSide);
-                clearSelectables();
+                clearSelectable();
             }
         };
-        selectable.relocate(tile.getxReal(), tile.getyReal());
+        selectable.relocate(tile.getXReal(), tile.getYReal());
         selectable.setCrownIcon();
         this.addToBoardGUI(selectable);
-        selectables.add(selectable);
+        this.selectable.add(selectable);
     }
     
     /**
      * Adds a Visual tile that does not perform any move upon click
      * @param tile to be rendered at 
      */
-    public void addVisualizable(Tile tile) {
+    public void addVisualize(Tile tile) {
         Selectable selectable = new Selectable(tile, this, Selectable.LIGHT_GREY,
                 Selectable.LIGHT_GREY, Selectable.GREY, Selectable.LIGHT_GREY, app);
-        selectable.relocate(tile.getxReal(), tile.getyReal());
+        selectable.relocate(tile.getXReal(), tile.getYReal());
         selectable.setHighlightsNoHover();
         this.addToBoardGUI(selectable);
-        selectables.add(selectable);
+        this.selectable.add(selectable);
     }
     
     /**
@@ -417,26 +418,24 @@ public class Game {
      */
     private void renderTurn() {  
         if(gameInfo.isLastTurnWhite()) {
-           whiteCirc.setFill(GREEN);
-           blackCirc.setFill(RED); 
+           whiteCircle.setFill(GREEN);
+           blackCircle.setFill(RED);
         } else {
-           whiteCirc.setFill(RED);
-           blackCirc.setFill(GREEN); 
+           whiteCircle.setFill(RED);
+           blackCircle.setFill(GREEN);
         }  
     }
 
     /**
      * Clears all selectable from the Game GUI and the CURRENT selected tile
      */
-    public void clearSelectables() {
+    public void clearSelectable() {
         if(selectedTile != null) {
             selectedTile.setUnselected();
             selectedTile = null;
         }
-        selectables.forEach((Selectable selectable) -> {
-            getBoardGUI().getChildren().remove(selectable);
-        });
-        selectables.clear();
+        selectable.forEach((Selectable selectable) -> getBoardGUI().getChildren().remove(selectable));
+        selectable.clear();
     }
     
     /**
@@ -444,14 +443,12 @@ public class Game {
      * and the tile the piece was moved to
      */
     public void highlightRecentTiles() {
-        highlightedTiles.forEach((tile)->{
-            tile.setUnHighLighted();
-        });
+        highlightedTiles.forEach(Tile::setUnHighLighted);
         highlightedTiles.clear();
-        ArrayList<int[]> coords = gameInfo.getRecentlyMovedTileCoords();
-        coords.forEach((coord)->{
-            highlightedTiles.add(board.getTiles()[coord[0]][coord[1]]);
-            board.getTiles()[coord[0]][coord[1]].setHighLighted();
+        ArrayList<int[]> coordinates = gameInfo.getRecentlyMovedTileCoordinates();
+        coordinates.forEach((coordinate)->{
+            highlightedTiles.add(board.getTiles()[coordinate[0]][coordinate[1]]);
+            board.getTiles()[coordinate[0]][coordinate[1]].setHighLighted();
         });
     }
     
@@ -599,7 +596,7 @@ public class Game {
         Tile selected = selectedTile;
         Piece taken = tile.getPiece();
         gameInfo.makeMove(selected,tile);
-        selected.movePiece(tile);   
+        selected.movePiece(tile);
         if(taken != null) {
             removeTaken(taken);
             gameInfo.setRecentCapture();
@@ -651,7 +648,7 @@ public class Game {
      * Add the most recently added move to notationTable
      * 
      * @param tile to be moved to
-     * @param piece to be promoted to
+     * @param promotionTo to be promoted to
      */
     private void movePromotion(Tile tile, Piece promotionTo) {
         int oldNot = gameInfo.getMoveNum();
@@ -661,7 +658,7 @@ public class Game {
         Tile selected = selectedTile;
         Piece taken = tile.getPiece();
         gameInfo.makeMovePromotion(selected,tile,promotionTo);
-        selected.movePiece(tile);   
+        selected.movePiece(tile);
         if(taken != null) {
             removeTaken(taken);
             gameInfo.setRecentCapture();
@@ -703,13 +700,13 @@ public class Game {
         inCheck = false;
         if(forWhite) {
             if(kingSide) {
-                //kingside white castle
+                //king side white castle
                 board.getTiles()[LOWER_BOUNDARY][UPPER_BOUNDARY].getPiece().toFront(); //rook to front
                 gameInfo.makeMoveCastleKingSide(board.getWhiteKing(), board.getTiles()[LOWER_BOUNDARY][UPPER_BOUNDARY].getPiece());
                 board.getWhiteKing().getTile().movePiece(board.getTiles()[LOWER_BOUNDARY][UPPER_BOUNDARY-1]);
-                board.getTiles()[LOWER_BOUNDARY][UPPER_BOUNDARY].movePiece(board.getTiles()[LOWER_BOUNDARY][UPPER_BOUNDARY-2]); 
+                board.getTiles()[LOWER_BOUNDARY][UPPER_BOUNDARY].movePiece(board.getTiles()[LOWER_BOUNDARY][UPPER_BOUNDARY-2]);
             } else {
-                //queenside white castle
+                //queen side white castle
                 board.getTiles()[LOWER_BOUNDARY][LOWER_BOUNDARY].getPiece().toFront(); //rook to front
                 gameInfo.makeMoveCastleQueenSide(board.getWhiteKing(), board.getTiles()[LOWER_BOUNDARY][LOWER_BOUNDARY].getPiece());
                 board.getWhiteKing().getTile().movePiece(board.getTiles()[LOWER_BOUNDARY][LOWER_BOUNDARY+2]);
@@ -717,13 +714,13 @@ public class Game {
             }
         } else {
             if(kingSide) {
-                //kingside black castle
+                //king side black castle
                 board.getTiles()[UPPER_BOUNDARY][UPPER_BOUNDARY].getPiece().toFront(); //rook to front
                 gameInfo.makeMoveCastleKingSide(board.getBlackKing(), board.getTiles()[UPPER_BOUNDARY][UPPER_BOUNDARY].getPiece());
-                board.getBlackKing().getTile().movePiece(board.getTiles()[UPPER_BOUNDARY][UPPER_BOUNDARY-1]); 
-                board.getTiles()[UPPER_BOUNDARY][UPPER_BOUNDARY].movePiece(board.getTiles()[UPPER_BOUNDARY][UPPER_BOUNDARY-2]); 
+                board.getBlackKing().getTile().movePiece(board.getTiles()[UPPER_BOUNDARY][UPPER_BOUNDARY-1]);
+                board.getTiles()[UPPER_BOUNDARY][UPPER_BOUNDARY].movePiece(board.getTiles()[UPPER_BOUNDARY][UPPER_BOUNDARY-2]);
             } else {
-                //queenside black castle
+                //queen side black castle
                 board.getTiles()[UPPER_BOUNDARY][LOWER_BOUNDARY].getPiece().toFront(); //rook to front
                 gameInfo.makeMoveCastleQueenSide(board.getBlackKing(), board.getTiles()[UPPER_BOUNDARY][LOWER_BOUNDARY].getPiece());
                 board.getBlackKing().getTile().movePiece(board.getTiles()[UPPER_BOUNDARY][LOWER_BOUNDARY+2]);
@@ -748,21 +745,19 @@ public class Game {
         }
         Task<Void> sleeper = new Task<Void>() {
             @Override
-            protected Void call() throws Exception {
+            protected Void call() {
                 try {
                     FadeTransition ft = new FadeTransition(Duration.millis(150), taken);
                     ft.setFromValue(1.0);
                     ft.setToValue(0.1);
                     ft.play();
                     Thread.sleep(150);
-                } catch (InterruptedException e) {
+                } catch (InterruptedException ignored) {
                 }
                 return null;
             }
         };
-        sleeper.setOnSucceeded((WorkerStateEvent event) -> {
-            getBoardGUI().getChildren().remove(taken);
-        });
+        sleeper.setOnSucceeded((WorkerStateEvent event) -> getBoardGUI().getChildren().remove(taken));
         new Thread(sleeper).start();
     }
     
@@ -774,10 +769,10 @@ public class Game {
     private void promotionDelay(Piece oldPiece, Piece newPiece) {
         Task<Void> sleeper = new Task<Void>() {
             @Override
-            protected Void call() throws Exception {
+            protected Void call() {
                 try {
                     Thread.sleep(150);
-                } catch (InterruptedException e) {
+                } catch (InterruptedException ignored) {
                 }
                 return null;
             }
@@ -813,6 +808,7 @@ public class Game {
      * Save the Game as a PGN file
      * Opens up a new window to allow for user's selection of file/path
      */
+
     public void savePGNAsFile() {
         String result;
         if(finished) {
@@ -861,7 +857,6 @@ public class Game {
         try {
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(file,false))) {
                 writer.write(string);
-                writer.close();
             }
         } catch (IOException ex) {
             Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
@@ -1110,16 +1105,16 @@ public class Game {
      * @return HBox to be constructed and returned
     */
     public HBox constructBorder() {
-        HBox bordercontainer = new HBox();
-        bordercontainer.setMinSize(1+20,topBarHeight);
-        bordercontainer.setMaxSize(1+20,topBarHeight);
+        HBox borderContainer = new HBox();
+        borderContainer.setMinSize(1+20,topBarHeight);
+        borderContainer.setMaxSize(1+20,topBarHeight);
         VBox border = new VBox();
         border.setId("sideborder");
         border.setMinSize(1,topBarHeight-10);
         border.setMaxSize(1,topBarHeight-10);
-        bordercontainer.setPadding(new Insets(1,10,1,10));
-        bordercontainer.getChildren().addAll(border);
-        return bordercontainer;
+        borderContainer.setPadding(new Insets(1,10,1,10));
+        borderContainer.getChildren().addAll(border);
+        return borderContainer;
     }   
     
     /**
@@ -1139,9 +1134,7 @@ public class Game {
         exportButton.setId("barbutton");
         exportButton.setPadding(Insets.EMPTY);
         exportButton.setContentDisplay(ContentDisplay.TOP);
-        exportButton.setOnAction((event)->{
-            savePGNAsFile();
-        });
+        exportButton.setOnAction((event)-> savePGNAsFile());
         return exportButton;
     }
     
@@ -1162,9 +1155,7 @@ public class Game {
         exportButton.setId("barbutton");
         exportButton.setPadding(Insets.EMPTY);
         exportButton.setContentDisplay(ContentDisplay.TOP);
-        exportButton.setOnAction((event)->{
-            copyFENToClip();
-        });
+        exportButton.setOnAction((event)-> copyFENToClip());
         return exportButton;
     }
     
@@ -1185,9 +1176,7 @@ public class Game {
         flipButton.setId("barbutton");
         flipButton.setPadding(Insets.EMPTY);
         flipButton.setContentDisplay(ContentDisplay.TOP);
-        flipButton.setOnAction((event)->{
-            flipBoardGUI();
-        });
+        flipButton.setOnAction((event)-> flipBoardGUI());
         return flipButton;
     }
     
@@ -1208,9 +1197,7 @@ public class Game {
         resetButton.setId("barbutton");
         resetButton.setPadding(Insets.EMPTY);
         resetButton.setContentDisplay(ContentDisplay.TOP);
-        resetButton.setOnAction((event)->{
-            resetGame();
-        });
+        resetButton.setOnAction((event)-> resetGame());
         return resetButton;
     }
     
@@ -1231,9 +1218,7 @@ public class Game {
         newButton.setId("barbutton");
         newButton.setPadding(Insets.EMPTY);
         newButton.setContentDisplay(ContentDisplay.TOP);
-        newButton.setOnAction((event)->{
-            app.newGame(stage);
-        });
+        newButton.setOnAction((event)-> app.newGame(stage));
         return newButton;
     }
     
@@ -1254,9 +1239,7 @@ public class Game {
         newButton.setId("barbutton");
         newButton.setPadding(Insets.EMPTY);
         newButton.setContentDisplay(ContentDisplay.TOP);
-        newButton.setOnAction((event)->{
-            app.openAppearancePanel(stage, this);
-        });
+        newButton.setOnAction((event)-> app.openAppearancePanel(stage, this));
         return newButton;
     }
     
@@ -1274,9 +1257,7 @@ public class Game {
         leftButton.setMaxSize(50*app.getScale(), 50*app.getScale());
         leftButton.setFocusTraversable(false);
         leftButton.setId("boardbutton");
-        leftButton.setOnAction((event)->{
-            goLeft();
-        });
+        leftButton.setOnAction((event)-> goLeft());
         return leftButton;
     }
     
@@ -1294,9 +1275,7 @@ public class Game {
         rightButton.setMaxSize(50*app.getScale(), 50*app.getScale());
         rightButton.setFocusTraversable(false);
         rightButton.setId("boardbutton");
-        rightButton.setOnAction((event)->{
-            goRight();
-        });
+        rightButton.setOnAction((event)-> goRight());
         return rightButton;
     }
     
@@ -1314,9 +1293,7 @@ public class Game {
         backButton.setMaxSize(50*app.getScale(), 50*app.getScale());
         backButton.setFocusTraversable(false);
         backButton.setId("boardbutton");
-        backButton.setOnAction((event)->{
-            takeBackMove();
-        });
+        backButton.setOnAction((event)-> takeBackMove());
         return backButton;
     }
     
@@ -1331,12 +1308,12 @@ public class Game {
         sidebar.setMaxSize(barWidth, elementHeight + scoreBoardHeight + elementHeight);
         sidebar.setAlignment(Pos.CENTER);
         HBox titles = constructTitles();
-        HBox bottombuttons = constructButtonPanel();
+        HBox bottomButtons = constructButtonPanel();
         setUpNotationGUI();
         HBox notationHBox = new HBox();
         notationHBox.getChildren().add(notationTable);
         notationHBox.setPadding(new Insets(0,barWidth*0.1,0,barWidth*0.1));
-        sidebar.getChildren().addAll(titles,notationHBox,bottombuttons);
+        sidebar.getChildren().addAll(titles,notationHBox, bottomButtons);
         return sidebar;
     }
     
@@ -1381,14 +1358,14 @@ public class Game {
         white.setMinSize(barWidth/2, elementHeight);
         white.setMaxSize(barWidth/2, elementHeight);
         white.setId("lightborderright");
-        white.setGraphic(whiteCirc);
+        white.setGraphic(whiteCircle);
         Label black = new Label(" Black");
         black.setFont(new Font("Roboto", 26*app.getScale()));
         black.setAlignment(Pos.CENTER);
         black.setMinSize(barWidth/2, elementHeight);
         black.setMaxSize(barWidth/2, elementHeight);
         black.setId("lightborderleft");
-        black.setGraphic(blackCirc);
+        black.setGraphic(blackCircle);
         titles.getChildren().addAll(white, black);
         return titles;
     }

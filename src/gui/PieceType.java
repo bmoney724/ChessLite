@@ -4,12 +4,7 @@
  */
 package gui;
 
-import gui.pieces.Bishop;
-import gui.pieces.King;
-import gui.pieces.Knight;
-import gui.pieces.Pawn;
-import gui.pieces.Queen;
-import gui.pieces.Rook;
+import gui.pieces.*;
 
 /**
  *

@@ -11,6 +11,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
+import javafx.scene.text.Font;
+
+import java.util.Objects;
 
 /**
  *
@@ -87,11 +90,11 @@ public final class Tile extends StackPane {
         this.colBoard = colBoard;
     }
 
-    public void setxReal(double xReal) {
+    public void setXReal(double xReal) {
         this.xReal = xReal;
     }
 
-    public void setyReal(double yReal) {
+    public void setYReal(double yReal) {
         this.yReal = yReal;
     }
 
@@ -107,11 +110,11 @@ public final class Tile extends StackPane {
         return colBoard;
     }
 
-    public double getxReal() {
+    public double getXReal() {
         return xReal;
     }
 
-    public double getyReal() {
+    public double getYReal() {
         return yReal;
     }
 
@@ -124,7 +127,7 @@ public final class Tile extends StackPane {
     }
     
     public boolean hasKing() {
-        return hasPiece() && getPiece().isKing();
+        return hasPiece() && Objects.requireNonNull(getPiece()).isKing();
     }
     
     /**
@@ -137,6 +140,7 @@ public final class Tile extends StackPane {
         } else {
             lbl.setId("lightfont");
         }
+        lbl.setFont(new Font("Roboto",17*getController().getApp().getScale()));
         this.getChildren().add(lbl);
     }
     
@@ -256,7 +260,7 @@ public final class Tile extends StackPane {
             if (last != null) {
                 last.getPiece().setCloseable(false);
             }
-            getController().clearSelectables();
+            getController().clearSelectable();
         });
         
         rec = new Rectangle();
@@ -270,8 +274,8 @@ public final class Tile extends StackPane {
         setUnHighLighted();
         
         Rectangle rect = new Rectangle(0, 0, tileSize, tileSize);
-        Circle circ = new Circle(tileSize / 2, tileSize / 2, Math.min(tileSize, tileSize) / 2);
-        checkShape = Shape.subtract(rect, circ);
+        Circle round = new Circle(tileSize / 2, tileSize / 2, (tileSize) / 2);
+        checkShape = Shape.subtract(rect, round);
         checkShape.setFill(getCheckColor());
         
         Label testLabel = new Label(row + "," + col);

@@ -4,14 +4,11 @@
  */
 package gui.pieces;
 
-import gui.GameInfo;
-import gui.Game;
-import gui.Move;
-import gui.Piece;
-import gui.Tile;
-import java.util.ArrayList;
+import gui.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+
+import java.util.ArrayList;
 
 /**
  *
@@ -22,7 +19,7 @@ public final class Pawn extends Piece{
      /*
      * Attack pattern: 
      * Can only move to - M 
-     * Only avaliable if piece to Take - T 
+     * Only available if piece to Take - T
      * white 
      * O    O    O    O 
      * T    M    T    O 
@@ -36,8 +33,8 @@ public final class Pawn extends Piece{
      * 
      */
     
-    private final ArrayList<Tile> avaliableEnPassant = new ArrayList<>();
-    private final ArrayList<Tile> avaliablePromotion = new ArrayList<>();
+    private final ArrayList<Tile> availableEnPassant = new ArrayList<>();
+    private final ArrayList<Tile> availablePromotion = new ArrayList<>();
     
     public String whitePawn;
     public String blackPawn;
@@ -70,28 +67,28 @@ public final class Pawn extends Piece{
     }
 
     @Override
-    public void pieceAvaliableMoves() {
-        avaliableEnPassant.clear();
-        avaliablePromotion.clear();
+    public void pieceAvailableMoves() {
+        availableEnPassant.clear();
+        availablePromotion.clear();
         Game controller = getController();
         Tile[][] tiles = controller.getTiles();
         int row = getTile().getRow();
         int col = getTile().getCol();
-        ArrayList<Tile> avaliable = getAvaliable();
+        ArrayList<Tile> available = getAvailable();
         
         if(isWhite()) {
             if(withinBounds(row+1,col)) {
                 Tile firstTile = tiles[row+1][col];
                 if(!firstTile .hasPiece()) {
                     if (row != 6) {
-                        avaliable.add(firstTile);
+                        available.add(firstTile);
                     } else {
-                        avaliablePromotion.add((firstTile));
+                        availablePromotion.add((firstTile));
                     }
                     if(getTile().getRow() == 1) {
                         Tile secondTile = tiles[row+2][col];
                         if(!secondTile.hasPiece()) {
-                            avaliable.add(secondTile);
+                            available.add(secondTile);
                         }
                     }
                 }
@@ -101,9 +98,9 @@ public final class Pawn extends Piece{
                 if(tile.hasPiece() && 
                         tile.getPiece().isWhite() != isWhite()) {
                     if(row != 6){
-                        avaliable.add(tile);
+                        available.add(tile);
                     } else {
-                        avaliablePromotion.add(tile);
+                        availablePromotion.add(tile);
                     }
                 }
             }
@@ -112,9 +109,9 @@ public final class Pawn extends Piece{
                 if(tile.hasPiece() && 
                         tile.getPiece().isWhite() != isWhite()) {
                     if(row != 6) {
-                        avaliable.add(tile);
+                        available.add(tile);
                     } else {
-                        avaliablePromotion.add(tile);
+                        availablePromotion.add(tile);
                     }
                 }
             }
@@ -128,7 +125,7 @@ public final class Pawn extends Piece{
                             toTake.getPiece().isWhite() != isWhite() 
                             && lastMove.getNewPos()[1] == col-1 && lastMove.getNewPos()[0] == row
                             && lastMove.getOldPos()[1] == col-1 && lastMove.getOldPos()[0] == row+2) {
-                        avaliableEnPassant.add(toMove);
+                        availableEnPassant.add(toMove);
                     }
                 }
                 if(withinBounds(row,col+1) && withinBounds(row+1,col+1)) {
@@ -139,7 +136,7 @@ public final class Pawn extends Piece{
                             toTake.getPiece().isWhite() != isWhite() 
                             && lastMove.getNewPos()[1] == col+1 && lastMove.getNewPos()[0] == row
                             && lastMove.getOldPos()[1] == col+1 && lastMove.getOldPos()[0] == row+2) {
-                        avaliableEnPassant.add(toMove);
+                        availableEnPassant.add(toMove);
                     }
                 }
             }
@@ -148,14 +145,14 @@ public final class Pawn extends Piece{
                 Tile firstTile = tiles[row-1][col];
                 if(!firstTile.hasPiece()) {
                     if(row != 1) {
-                        avaliable.add(firstTile);
+                        available.add(firstTile);
                     } else {
-                        avaliablePromotion.add(firstTile);
+                        availablePromotion.add(firstTile);
                     }
                     if(getTile().getRow() == 6) {
                         Tile secondTile = tiles[row-2][col];
                         if(!secondTile.hasPiece()) {
-                            avaliable.add(secondTile);
+                            available.add(secondTile);
                         }
                     }
                 }
@@ -164,9 +161,9 @@ public final class Pawn extends Piece{
                 Tile tile = tiles[row-1][col+1];
                 if(tile.hasPiece() && tile.getPiece().isWhite() != isWhite()) {
                     if(row != 1) {
-                        avaliable.add(tile);
+                        available.add(tile);
                     } else {
-                        avaliablePromotion.add(tile);
+                        availablePromotion.add(tile);
                     }
                 }
             }
@@ -174,9 +171,9 @@ public final class Pawn extends Piece{
                 Tile tile = tiles[row-1][col-1];
                 if(tile.hasPiece() && tile.getPiece().isWhite() != isWhite()) {
                     if(row != 1) {
-                        avaliable.add(tile);
+                        available.add(tile);
                     } else {
-                        avaliablePromotion.add(tile);
+                        availablePromotion.add(tile);
                     }
                 }
             }
@@ -190,7 +187,7 @@ public final class Pawn extends Piece{
                             toTake.getPiece().isWhite() != isWhite() 
                             && lastMove.getNewPos()[1] == col-1 && lastMove.getNewPos()[0] == row
                             && lastMove.getOldPos()[1] == col-1 && lastMove.getOldPos()[0] == row-2) {
-                        avaliableEnPassant.add(toMove);
+                        availableEnPassant.add(toMove);
                     }
                 }
                 if(withinBounds(row,col+1) && withinBounds(row-1,col-1)) {
@@ -201,7 +198,7 @@ public final class Pawn extends Piece{
                             toTake.getPiece().isWhite() != isWhite() 
                             && lastMove.getNewPos()[1] == col+1 && lastMove.getNewPos()[0] == row
                             && lastMove.getOldPos()[1] == col+1 && lastMove.getOldPos()[0] == row-2) {
-                        avaliableEnPassant.add(toMove);
+                        availableEnPassant.add(toMove);
                     }
                 }
             }
@@ -209,14 +206,14 @@ public final class Pawn extends Piece{
     }
     
     @Override
-    public void pieceAvaliableMoves(ArrayList<Tile> whiteList) {
-        avaliableEnPassant.clear();
-        avaliablePromotion.clear();
+    public void pieceAvailableMoves(ArrayList<Tile> whiteList) {
+        availableEnPassant.clear();
+        availablePromotion.clear();
         Game controller = getController();
         Tile[][] tiles = controller.getTiles();
         int row = getTile().getRow();
         int col = getTile().getCol();
-        ArrayList<Tile> avaliable = getAvaliable();
+        ArrayList<Tile> available = getAvailable();
         
         if(isWhite()) {
             if(withinBounds(row+1,col)) {
@@ -224,17 +221,17 @@ public final class Pawn extends Piece{
                 if(!firstTile .hasPiece()) {
                     if (row != 6) {
                         if(whiteListed(whiteList, firstTile)) {
-                            avaliable.add(firstTile);
+                            available.add(firstTile);
                         }
                     } else {
                         if(whiteListed(whiteList, firstTile)) {
-                            avaliablePromotion.add((firstTile));
+                            availablePromotion.add((firstTile));
                         }
                     }
                     if(getTile().getRow() == 1) {
                         Tile secondTile = tiles[row+2][col];
                         if(!secondTile.hasPiece() && whiteListed(whiteList, secondTile)) {
-                            avaliable.add(secondTile);
+                            available.add(secondTile);
                         }
                     }
                 }
@@ -244,9 +241,9 @@ public final class Pawn extends Piece{
                 if(whiteListed(whiteList, tile) && tile.hasPiece() && 
                         tile.getPiece().isWhite() != isWhite()) {
                     if(row != 6){
-                        avaliable.add(tile);
+                        available.add(tile);
                     } else {
-                        avaliablePromotion.add(tile);
+                        availablePromotion.add(tile);
                     }
                 }
             }
@@ -255,9 +252,9 @@ public final class Pawn extends Piece{
                 if(whiteListed(whiteList, tile) && tile.hasPiece() && 
                         tile.getPiece().isWhite() != isWhite()) {
                     if(row != 6) {
-                        avaliable.add(tile);
+                        available.add(tile);
                     } else {
-                        avaliablePromotion.add(tile);
+                        availablePromotion.add(tile);
                     }
                 }
             }
@@ -271,7 +268,7 @@ public final class Pawn extends Piece{
                             toTake.getPiece().isWhite() != isWhite() 
                             && lastMove.getNewPos()[1] == col-1 && lastMove.getNewPos()[0] == row
                             && lastMove.getOldPos()[1] == col-1 && lastMove.getOldPos()[0] == row+2) {
-                        avaliableEnPassant.add(toMove);
+                        availableEnPassant.add(toMove);
                     }
                 }
                 if(withinBounds(row,col+1) && withinBounds(row+1,col+1)) {
@@ -282,7 +279,7 @@ public final class Pawn extends Piece{
                             toTake.getPiece().isWhite() != isWhite() 
                             && lastMove.getNewPos()[1] == col+1 && lastMove.getNewPos()[0] == row
                             && lastMove.getOldPos()[1] == col+1 && lastMove.getOldPos()[0] == row+2) {
-                        avaliableEnPassant.add(toMove);
+                        availableEnPassant.add(toMove);
                     }
                 }
             }
@@ -292,17 +289,17 @@ public final class Pawn extends Piece{
                 if(!firstTile.hasPiece()) {
                     if(row != 1) {
                         if(whiteListed(whiteList, firstTile)) {
-                            avaliable.add(firstTile);
+                            available.add(firstTile);
                         }    
                     } else {
                         if(whiteListed(whiteList, firstTile)) {
-                            avaliablePromotion.add(firstTile);
+                            availablePromotion.add(firstTile);
                         } 
                     }
                     if(getTile().getRow() == 6 ) {
                         Tile secondTile = tiles[row-2][col];
                         if(!secondTile.hasPiece() && whiteListed(whiteList, secondTile)) {
-                            avaliable.add(secondTile);
+                            available.add(secondTile);
                         }
                     }
                 }
@@ -312,9 +309,9 @@ public final class Pawn extends Piece{
                 if(whiteListed(whiteList, tile) && tile.hasPiece() && 
                         tile.getPiece().isWhite() != isWhite()) {
                     if(row != 1) {
-                        avaliable.add(tile);
+                        available.add(tile);
                     } else {
-                        avaliablePromotion.add(tile);
+                        availablePromotion.add(tile);
                     }
                 }
             }
@@ -323,9 +320,9 @@ public final class Pawn extends Piece{
                 if(whiteListed(whiteList, tile) && tile.hasPiece() && 
                         tile.getPiece().isWhite() != isWhite()) {
                     if(row != 1) {
-                        avaliable.add(tile);
+                        available.add(tile);
                     } else {
-                        avaliablePromotion.add(tile);
+                        availablePromotion.add(tile);
                     }
                 }
             }
@@ -339,7 +336,7 @@ public final class Pawn extends Piece{
                             toTake.getPiece().isWhite() != isWhite() 
                             && lastMove.getNewPos()[1] == col-1 && lastMove.getNewPos()[0] == row
                             && lastMove.getOldPos()[1] == col-1 && lastMove.getOldPos()[0] == row-2) {
-                        avaliableEnPassant.add(toMove);
+                        availableEnPassant.add(toMove);
                     }
                 }
                 if(withinBounds(row,col+1) && withinBounds(row-1,col-1)) {
@@ -350,7 +347,7 @@ public final class Pawn extends Piece{
                             toTake.getPiece().isWhite() != isWhite() 
                             && lastMove.getNewPos()[1] == col+1 && lastMove.getNewPos()[0] == row
                             && lastMove.getOldPos()[1] == col+1 && lastMove.getOldPos()[0] == row-2) {
-                        avaliableEnPassant.add(toMove);
+                        availableEnPassant.add(toMove);
                     }
                 }
             }
@@ -358,31 +355,23 @@ public final class Pawn extends Piece{
     }
     
     /**
-     * Overrides render method to include avaliable tiles for enPassant and Promotion
+     * Overrides render method to include available tiles for enPassant and Promotion
      */
     @Override
-    protected void renderSelectables() {
-        super.renderSelectables();
-        avaliableEnPassant.forEach((avaliableTile) -> {
-            getController().addEnPassantSelectable(avaliableTile, isWhite() ? -1 : 1);
-        });
-        avaliablePromotion.forEach((avaliableTile) -> {
-            getController().addPromotionSelectable(avaliableTile);
-        });
+    protected void renderSelectable() {
+        super.renderSelectable();
+        availableEnPassant.forEach((availableTile) -> getController().addEnPassantSelectable(availableTile, isWhite() ? -1 : 1));
+        availablePromotion.forEach((availableTile) -> getController().addPromotionSelectable(availableTile));
     }
     
     /**
-     * Overrides render method to include avaliable tiles for enPassant and Promotion
+     * Overrides render method to include available tiles for enPassant and Promotion
      */
     @Override
-    protected void renderVisualizables() {
-        super.renderVisualizables();
-        avaliableEnPassant.forEach((avaliableTile) -> {
-            getController().addVisualizable(avaliableTile);
-        });
-        avaliablePromotion.forEach((avaliableTile) -> {
-            getController().addVisualizable(avaliableTile);
-        });
+    protected void renderVisualize() {
+        super.renderVisualize();
+        availableEnPassant.forEach((availableTile) -> getController().addVisualize(availableTile));
+        availablePromotion.forEach((availableTile) -> getController().addVisualize(availableTile));
     }
     
     @Override
@@ -432,7 +421,7 @@ public final class Pawn extends Piece{
     
     @Override
     protected boolean hasLegalMoves() {
-        return !getAvaliable().isEmpty() || !avaliablePromotion.isEmpty() || !avaliableEnPassant.isEmpty();
+        return !getAvailable().isEmpty() || !availablePromotion.isEmpty() || !availableEnPassant.isEmpty();
     }
     
     @Override

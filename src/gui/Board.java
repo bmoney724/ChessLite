@@ -6,13 +6,15 @@
  */
 package gui;
 
-import java.util.ArrayList;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
-import static gui.Game.WIDTH;
+
+import java.util.ArrayList;
+
 import static gui.Game.HEIGHT;
+import static gui.Game.WIDTH;
 
 /**
  *
@@ -26,8 +28,8 @@ public class Board {
         PieceType.WhiteRook, PieceType.WhiteQueen, PieceType.WhiteKing, 
         PieceType.BlackPawn, PieceType.BlackBishop, PieceType.BlackKnight,
         PieceType.BlackRook, PieceType.BlackQueen, PieceType.BlackKing};
-    public static int UPPER_BOUND = 8;
-    public static int LOWER_BOUND = -1;
+    public static final int UPPER_BOUND = 8;
+    public static final int LOWER_BOUND = -1;
     
     private Pane boardGUI;
     private final Tile[][] tiles = new Tile[HEIGHT][WIDTH]; //board tiles
@@ -36,8 +38,8 @@ public class Board {
     private Piece blackKing; //kings
     private Piece whiteKing;
     private final ArrayList<Tile> attackingKing = new ArrayList<>(); //tiles attacking King
-    private final ArrayList<Tile> attackWhiteListed = new ArrayList<>(); //avaliable tiles during attack
-    private final ArrayList<Tile> kingCanMove = new ArrayList<>(); //avaliable tiles for King
+    private final ArrayList<Tile> attackWhiteListed = new ArrayList<>(); //available tiles during attack
+    private final ArrayList<Tile> kingCanMove = new ArrayList<>(); //available tiles for King
     
     /**
      * Normalizes a value direction within the context of Chess to be quantifiable into
@@ -47,7 +49,7 @@ public class Board {
      * @param num, the number to be normalized
      * @return the normalized value
      */
-    public static final int normalize(int num) {
+    public static int normalize(int num) {
         return num == 0 ? 0 : num/Math.abs(num);
     }
     
@@ -58,7 +60,7 @@ public class Board {
      * @param col, the column for the position
      * @return true or false
      */
-    protected static final boolean withinBounds(int row, int col) {
+    protected static boolean withinBounds(int row, int col) {
         return (row < UPPER_BOUND && row > LOWER_BOUND) && (col < UPPER_BOUND && col > LOWER_BOUND);
     }
     
@@ -140,16 +142,12 @@ public class Board {
         Piece king = white ? whiteKing : blackKing;
         attackingKing(king,attackingKing);
         kingCanMove(king,attackingKing,kingCanMove);
-        king.calcAvaliableMoves();
+        king.calcAvailableMoves();
         attackWhiteListed(attackingKing,king,attackWhiteListed);
         if(white) {
-            whiteNotKing.forEach((piece) -> {
-                piece.calcAvaliableMoves();
-            });
+            whiteNotKing.forEach(Piece::calcAvailableMoves);
         } else {
-            blackNotKing.forEach((piece) -> {
-                piece.calcAvaliableMoves();
-            });
+            blackNotKing.forEach(Piece::calcAvailableMoves);
         }
     }
     
@@ -326,7 +324,7 @@ public class Board {
      * Calculates the Tiles a given King can move to given the tiles currently attacking
      * said King and writes the tiles to an ArrayList
      * 
-     * Calculation iterates through the avaliable diagonal and horizontal positions
+     * Calculation iterates through the available diagonal and horizontal positions
      * and performs a basic availability evaluation, but with 2 additional rules:
      * The King cannot move to a square that is inCheck relative to its own type
      * (Utilizes Board::inCheck)
@@ -344,10 +342,10 @@ public class Board {
         int row = king.getTile().getRow();
         int col = king.getTile().getCol();
         
-        int diagonalOffsets[][] = {{1,1},{1,-1},{-1,1},{-1,-1}};
-        int dkc[][] = {{2,2},{1,2},{2,1},{0,2},{2,0}}; //diagonal king check
-        int horizontalOffsets[][] = {{1,0},{0,1},{-1,0},{0,-1}};
-        int hkc[][][] = {{{2,1},{2,0},{2,-1}},{{1,2},{0,2},{-1,2}},
+        int[][] diagonalOffsets = {{1,1},{1,-1},{-1,1},{-1,-1}};
+        int[][] dkc = {{2,2},{1,2},{2,1},{0,2},{2,0}}; //diagonal king check
+        int[][] horizontalOffsets = {{1,0},{0,1},{-1,0},{0,-1}};
+        int[][][] hkc = {{{2,1},{2,0},{2,-1}},{{1,2},{0,2},{-1,2}},
             {{-2,1},{-2,0},{-2,-1}},{{1,-2},{0,-2},{-1,-2}}}; //horizontal king check
         
         //diagonals
@@ -419,7 +417,7 @@ public class Board {
      */
     public void attackWhiteListed(ArrayList<Tile> attackingKing, Piece king, ArrayList<Tile> whiteListed) {
         whiteListed.clear();
-        if(attackingKing.isEmpty() || attackingKing.size() > 1) {
+        if(attackingKing.size() != 1) {
             return;
         }
         Tile attack = attackingKing.get(0);

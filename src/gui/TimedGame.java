@@ -42,12 +42,12 @@ public class TimedGame extends Game {
      * @param timeInSeconds, the total time for each side
      * @param incrementInSeconds, the increment in seconds after a move
      * @param stage, the stage game belongs to
-     * @param timertype, the type of timer used in game re construction
+     * @param timerType, the type of timer used in game re construction
      * @param app, the application object
      */
-    public TimedGame(boolean whiteStart, double timeInSeconds, double incrementInSeconds, Stage stage, int timertype, ChessLite app) {
+    public TimedGame(boolean whiteStart, double timeInSeconds, double incrementInSeconds, Stage stage, int timerType, ChessLite app) {
         super(whiteStart, stage, app);
-        setTimerType(timertype);
+        setTimerType(timerType);
         blackValue = timeInSeconds;
         whiteValue = timeInSeconds;
         blackTimerGUI = new Label(convertToDisplayFormat((int) blackValue));
@@ -103,13 +103,13 @@ public class TimedGame extends Game {
      * @param timeInSeconds, the total time for each side
      * @param incrementInSeconds, the increment in seconds after a move
      * @param stage, the stage game belongs to
-     * @param timertype, the type of timer used in game re construction
+     * @param timerType, the type of timer used in game re construction
      * @param app, application object
      * @return a constructed Timed Game
      */
-    public static final TimedGame constructTimedGame(boolean whiteStart, double timeInSeconds,
-            double incrementInSeconds, Stage stage, int timertype, ChessLite app) {
-        TimedGame game = new TimedGame(whiteStart, timeInSeconds, incrementInSeconds, stage, timertype, app);
+    public static TimedGame constructTimedGame(boolean whiteStart, double timeInSeconds,
+                                               double incrementInSeconds, Stage stage, int timerType, ChessLite app) {
+        TimedGame game = new TimedGame(whiteStart, timeInSeconds, incrementInSeconds, stage, timerType, app);
         game.initBoard(whiteStart);
         game.initRoot();
         game.preGame();
@@ -164,9 +164,7 @@ public class TimedGame extends Game {
         backButton.setMaxSize(50 * getApp().getScale(), 50 * getApp().getScale());
         backButton.setFocusTraversable(false);
         backButton.setId("boardbutton");
-        backButton.setOnAction((event) -> {
-            takeBackMove();
-        });
+        backButton.setOnAction((event) -> takeBackMove());
         return backButton;
     }
 
@@ -176,7 +174,7 @@ public class TimedGame extends Game {
         whiteTimer.stop();
         blackTimer.stop();
         backButton.setDisable(true);
-        clearSelectables();
+        clearSelectable();
     }
 
     @Override
@@ -219,12 +217,12 @@ public class TimedGame extends Game {
         sidebar.setMaxSize(getBarWidth(), getElementHeight() + getElementHeight() + getScoreBoardHeight() + getElementHeight());
         HBox titles = constructTitles();
         HBox timers = constructTimers();
-        HBox bottombuttons = constructButtonPanel();
+        HBox bottomButtons = constructButtonPanel();
         setUpNotationGUI();
         HBox notationHBox = new HBox();
         notationHBox.getChildren().add(getNotationTable());
         notationHBox.setPadding(new Insets(0, getBarWidth() * 0.1, 0, getBarWidth() * 0.1));
-        sidebar.getChildren().addAll(titles, timers, notationHBox, bottombuttons);
+        sidebar.getChildren().addAll(titles, timers, notationHBox, bottomButtons);
         return sidebar;
     }
 
@@ -250,16 +248,16 @@ public class TimedGame extends Game {
 
     /**
      * Utility function to convert Timer Integer value to a string
-     * @param seconds
-     * @return 
+     * @param seconds the time to convert
+     * @return string as display format
      */
     private static String convertToDisplayFormat(int seconds) {
-        int minutes = (seconds / 60) <= 99 ? seconds / 60 : 99;
+        int minutes = Math.min((seconds / 60), 99);
         String minString = Integer.toString(minutes);
-        minString = minString.length() > 1 ? Integer.toString(minutes) : "0" + Integer.toString(minutes);
+        minString = minString.length() > 1 ? Integer.toString(minutes) : "0" + minutes;
         int remainder = seconds % 60;
         String secString = Integer.toString(remainder);
-        secString = secString.length() > 1 ? Integer.toString(remainder) : "0" + Integer.toString(remainder);
+        secString = secString.length() > 1 ? Integer.toString(remainder) : "0" + remainder;
         return minString + " : " + secString;
     }
 }

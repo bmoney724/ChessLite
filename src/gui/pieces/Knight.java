@@ -5,12 +5,13 @@
 package gui.pieces;
 
 import gui.Game;
+import gui.GameInfo;
 import gui.Piece;
 import gui.Tile;
-import java.util.ArrayList;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import gui.GameInfo;
+
+import java.util.ArrayList;
 
 /**
  *
@@ -61,38 +62,38 @@ public final class Knight extends Piece{
     }
     
     @Override
-    public void pieceAvaliableMoves() {
+    public void pieceAvailableMoves() {
         Game controller = getController();
         Tile[][] tiles = controller.getTiles();
         int row = getTile().getRow();
         int col = getTile().getCol();
-        ArrayList<Tile> avaliable = getAvaliable();
+        ArrayList<Tile> available = getAvailable();
         
         int[][] offsets = {{1,2},{2,1},{-1,2},{-2,1},{1,-2},{2,-1},{-1,-2},{-2,-1}};
         for(int[] offset : offsets) {
             if(withinBounds(row+offset[0],col+offset[1])) {
                 Tile tile = tiles[row+offset[0]][col+offset[1]];
                 if(!tile.hasPiece() || (tile.getPiece().isWhite() != isWhite())) {
-                    avaliable.add(tile);
+                    available.add(tile);
                 }
             }
         }
     }
     
     @Override
-    public void pieceAvaliableMoves(ArrayList<Tile> whiteList) {
+    public void pieceAvailableMoves(ArrayList<Tile> whiteList) {
         Game controller = getController();
         Tile[][] tiles = controller.getTiles();
         int row = getTile().getRow();
         int col = getTile().getCol();
-        ArrayList<Tile> avaliable = getAvaliable();
+        ArrayList<Tile> available = getAvailable();
         int[][] offsets = {{1,2},{2,1},{-1,2},{-2,1},{1,-2},{2,-1},{-1,-2},{-2,-1}};
         for(int[] offset : offsets) {
             if(withinBounds(row+offset[0],col+offset[1])) {
                 Tile tile = tiles[row+offset[0]][col+offset[1]];
                 if(whiteListed(whiteList, tile) && 
                         (!tile.hasPiece() || (tile.getPiece().isWhite() != isWhite()))) {
-                    avaliable.add(tile);
+                    available.add(tile);
                 }
             }
         }

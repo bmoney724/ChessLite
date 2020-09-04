@@ -6,16 +6,6 @@
 package gui;
 
 import fxutil.AudioClipPlayer;
-import java.awt.GraphicsEnvironment;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -34,9 +24,13 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Modality;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+
+import java.awt.*;
+import java.io.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -48,15 +42,10 @@ public class ChessLite extends Application {
     public static final String APP_ICON_PATH = "/resources/blackknight.png"; //icon paths
     public static final String NEW_ICON_PATH = "/resources/boardsparkle.png";
     public static final String SETTINGS_ICON_PATH = "/resources/whitepawn.png";
-    public static final int NO_TIMER = -1; //timer type for Game
-    public static final int CLASSIC = 0;
-    public static final int RAPID = 1;
-    public static final int BLITZ = 2;
-    public static final int BULLET = 3;
     public static final String SOUND_CLIP_PATH = ChessLite.class.getResource("/resources/movepiece.wav").toExternalForm();
     public static final ObservableList<String> TIMER_OPTIONS = FXCollections.observableArrayList( //combobox options
             "Casual Untimed", "Classic 30+20", "Rapid 15+10", "Blitz 3+2", "Bullet 1+0");
-    public static final int[][] TIMER_INFO = {{30*60,20},{15*60,10},{3*60,2},{1*60,0}};
+    public static final int[][] TIMER_INFO = {{30*60,20},{15*60,10},{3*60,2},{60,0}};
     public static final ObservableList<String> PIECES_OPTIONS = FXCollections.observableArrayList(
             "Classic", "Alpha", "Book", "Gothic");
     public static final ObservableList<String> COLORS_OPTIONS = FXCollections.observableArrayList(
@@ -67,17 +56,17 @@ public class ChessLite extends Application {
     public static final String CONFIG_DIR = System.getProperty("user.home") + FOLDER;
     public static final String CONFIG_PATH = System.getProperty("user.home") + 
             FOLDER + System.getProperty("file.separator") + CONFIG_NAME + ".dat";
-    public static final String[] AVALIABLE_PATHS = {"classic","alpha","book","gothic"};
+    public static final String[] AVAILABLE_PATHS = {"classic","alpha","book","gothic"};
     public static final int BROWN = 0;
     public static final int BLUE = 1;
     public static final int GREEN = 2;
     public static final int RED = 3;
     
     private final double height = GraphicsEnvironment.getLocalGraphicsEnvironment().
-            getDefaultScreenDevice().getDisplayMode().getHeight()*0.8;
-    private final double width = height*1.35;
+            getDefaultScreenDevice().getDisplayMode().getHeight()*0.80;
+    private final double width = height*1.37;
     private final double scale = height/960;
-    private final AudioClipPlayer clip = new AudioClipPlayer(SOUND_CLIP_PATH); //soundclip
+    private final AudioClipPlayer clip = new AudioClipPlayer(SOUND_CLIP_PATH); //sound clip
     private String path = "alpha"; //path for piece package
     private int colorTheme = 2; //color theme
 
@@ -138,7 +127,6 @@ public class ChessLite extends Application {
         try {
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(file,false))) {
                 writer.write(string);
-                writer.close();
             }
         } catch (IOException ex) {
             Logger.getLogger(ChessLite.class.getName()).log(Level.SEVERE, null, ex);
@@ -153,15 +141,14 @@ public class ChessLite extends Application {
     public void copyToFile(BufferedReader reader, File file) {
         try {
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
-                String contents = "";
+                StringBuilder contents = new StringBuilder();
                 String line;
                 while((line = reader.readLine()) != null) {
-                    contents = contents + line;
-                    contents = contents + "\n";
+                    contents.append(line);
+                    contents.append("\n");
                 }
-                writer.write(contents);
+                writer.write(contents.toString());
                 reader.close();
-                writer.close();
             }
         } catch (IOException ex) {
             Logger.getLogger(ChessLite.class.getName()).log(Level.SEVERE, null, ex);
@@ -196,12 +183,12 @@ public class ChessLite extends Application {
                         }
                     }
                     String str = data[0];
-                    if(contains(AVALIABLE_PATHS,str)) {
+                    if(contains(AVAILABLE_PATHS,str)) {
                         this.path = str;
                     }
-                    int colornum = (Integer.parseInt(data[1]));
-                    if(colornum <= RED && colornum >= BROWN) {
-                        colorTheme = colornum;
+                    int colorNum = (Integer.parseInt(data[1]));
+                    if(colorNum <= RED && colorNum >= BROWN) {
+                        colorTheme = colorNum;
                     }
                 }
             }
@@ -234,30 +221,29 @@ public class ChessLite extends Application {
      * @param stage stage the window belongs to
      */
     public void newGame(Stage stage) {
-        BorderPane newroot = new BorderPane();
-        Scene secondScene = new Scene(newroot, stage.getScene().getWidth()/2.3, stage.getScene().getHeight()/1.5);
+        BorderPane newRoot = new BorderPane();
+        Scene secondScene = new Scene(newRoot, stage.getScene().getWidth()/2.3, stage.getScene().getHeight()/1.5);
         secondScene.getStylesheets().add(ChessLite.class.getResource("/resources/chess.css").toExternalForm());
         Stage newWindow = new Stage();
         
         VBox content = new VBox();
         content.setSpacing(20);
         
-        Label timerlabel = new Label("Time Control");
-        timerlabel.setFont(new Font("Roboto",22*scale));
-        ObservableList<String> options = TIMER_OPTIONS;
-        ComboBox timerBox = new ComboBox<>(options);
+        Label timerLabel = new Label("Time Control");
+        timerLabel.setFont(new Font("Roboto",22*scale));
+        ComboBox timerBox = new ComboBox<>(TIMER_OPTIONS);
         timerBox.setId("combobox");
         double size = 20*scale;
         timerBox.setStyle("-fx-font: " + size + "px \"Roboto\";");
         timerBox.getSelectionModel().select(0);
         content.setAlignment(Pos.CENTER);
         
-        content.getChildren().addAll(timerlabel, timerBox);
+        content.getChildren().addAll(timerLabel, timerBox);
         
-        HBox horizontalbuttons = new HBox();
-        Button confirmbutton = new Button("Start");
-        confirmbutton.setOnAction((ActionEvent event) -> {
-            Stage thestage = (Stage) confirmbutton.getScene().getWindow();
+        HBox horizontalButtons = new HBox();
+        Button confirmButton = new Button("Start");
+        confirmButton.setOnAction((ActionEvent event) -> {
+            Stage theStage = (Stage) confirmButton.getScene().getWindow();
             int selected = timerBox.getSelectionModel().getSelectedIndex();
             Pane pane;
             if(selected == 0) {
@@ -265,27 +251,27 @@ public class ChessLite extends Application {
             } else {
                 pane = createPlayPaneTimed(stage, TIMER_INFO[selected-1][0], TIMER_INFO[selected-1][1],selected-1);
             }
-            thestage.close();
+            theStage.close();
             stage.getScene().setRoot(pane);
         });
-        confirmbutton.setId("appbutton");
-        confirmbutton.setFont(new Font("Roboto",22*scale));
-        confirmbutton.setFocusTraversable(false);
-        Button cancelbutton = new Button("Cancel");
-        cancelbutton.setOnAction((ActionEvent event) -> {
-            Stage thestage = (Stage) cancelbutton.getScene().getWindow();
-            thestage.close();
+        confirmButton.setId("appbutton");
+        confirmButton.setFont(new Font("Roboto",22*scale));
+        confirmButton.setFocusTraversable(false);
+        Button cancelButton = new Button("Cancel");
+        cancelButton.setOnAction((ActionEvent event) -> {
+            Stage theStage = (Stage) cancelButton.getScene().getWindow();
+            theStage.close();
         });
-        cancelbutton.setId("appbutton");
-        cancelbutton.setFont(new Font("Roboto",22*scale));
-        cancelbutton.setFocusTraversable(false);
-        horizontalbuttons.getChildren().addAll(confirmbutton, cancelbutton);
-        horizontalbuttons.setSpacing(20);
-        horizontalbuttons.setAlignment(Pos.CENTER);
-        BorderPane.setMargin(horizontalbuttons, new Insets(0,0,50,0));
+        cancelButton.setId("appbutton");
+        cancelButton.setFont(new Font("Roboto",22*scale));
+        cancelButton.setFocusTraversable(false);
+        horizontalButtons.getChildren().addAll(confirmButton, cancelButton);
+        horizontalButtons.setSpacing(20);
+        horizontalButtons.setAlignment(Pos.CENTER);
+        BorderPane.setMargin(horizontalButtons, new Insets(0,0,50,0));
         BorderPane.setMargin(content, new Insets(50,0,50,0));
-        newroot.setBottom(horizontalbuttons);
-        newroot.setTop(content);
+        newRoot.setBottom(horizontalButtons);
+        newRoot.setTop(content);
         
         newWindow.getIcons().add(new Image(NEW_ICON_PATH));
         newWindow.setTitle("New Game");
@@ -308,8 +294,8 @@ public class ChessLite extends Application {
      * @param game, the game to be re-rendered for upon change
      */
     public void openAppearancePanel(Stage stage, Game game) {
-        BorderPane newroot = new BorderPane();
-        Scene secondScene = new Scene(newroot, stage.getScene().getWidth()/2.3, stage.getScene().getHeight()/1.5);
+        BorderPane newRoot = new BorderPane();
+        Scene secondScene = new Scene(newRoot, stage.getScene().getWidth()/2.3, stage.getScene().getHeight()/1.5);
         secondScene.getStylesheets().add(ChessLite.class.getResource("/resources/chess.css").toExternalForm());
         Stage newWindow = new Stage();
         
@@ -320,8 +306,7 @@ public class ChessLite extends Application {
         styles.setSpacing(20);
         Label styleLabel = new Label("Pieces Style");
         styleLabel.setFont(new Font("Roboto",22*scale));
-        ObservableList<String> pieceoptions = PIECES_OPTIONS;
-        ComboBox pieceBox = new ComboBox<>(pieceoptions);
+        ComboBox pieceBox = new ComboBox<>(PIECES_OPTIONS);
         pieceBox.setPrefWidth(150*scale);
         pieceBox.setId("combobox");
         pieceBox.getSelectionModel().select(getPieceSelection(path));
@@ -335,8 +320,7 @@ public class ChessLite extends Application {
         colors.setSpacing(20);
         Label colorLabel = new Label("Board Color");
         colorLabel.setFont(new Font("Roboto",22*scale));
-        ObservableList<String> coloroptions = COLORS_OPTIONS;
-        ComboBox colorBox = new ComboBox<>(coloroptions);
+        ComboBox colorBox = new ComboBox<>(COLORS_OPTIONS);
         colorBox.setPrefWidth(130*scale);
         colorBox.setId("combobox");
         colorBox.getSelectionModel().select(colorTheme);
@@ -348,35 +332,35 @@ public class ChessLite extends Application {
         
         content.getChildren().addAll(styles,colors);
         
-        HBox horizontalbuttons = new HBox();
-        Button confirmbutton = new Button("Confirm");
-        confirmbutton.setOnAction((ActionEvent event) -> {
-            Stage thestage = (Stage) confirmbutton.getScene().getWindow();
+        HBox horizontalButtons = new HBox();
+        Button confirmButton = new Button("Confirm");
+        confirmButton.setOnAction((ActionEvent event) -> {
+            Stage theStage = (Stage) confirmButton.getScene().getWindow();
             int selected = pieceBox.getSelectionModel().getSelectedIndex();
-            path = AVALIABLE_PATHS[selected];
+            path = AVAILABLE_PATHS[selected];
             colorTheme = colorBox.getSelectionModel().getSelectedIndex();
             game.reRenderBoard();
             changeConfigData(path + "\n" + colorTheme);
-            thestage.close();
+            theStage.close();
         });
-        confirmbutton.setId("appbutton");
-        confirmbutton.setFont(new Font("Roboto",22*scale));
-        confirmbutton.setFocusTraversable(false);
-        Button cancelbutton = new Button("Cancel");
-        cancelbutton.setOnAction((ActionEvent event) -> {
-            Stage thestage = (Stage) cancelbutton.getScene().getWindow();
-            thestage.close();
+        confirmButton.setId("appbutton");
+        confirmButton.setFont(new Font("Roboto",22*scale));
+        confirmButton.setFocusTraversable(false);
+        Button cancelButton = new Button("Cancel");
+        cancelButton.setOnAction((ActionEvent event) -> {
+            Stage theStage = (Stage) cancelButton.getScene().getWindow();
+            theStage.close();
         });
-        cancelbutton.setId("appbutton");
-        cancelbutton.setFont(new Font("Roboto",22*scale));
-        cancelbutton.setFocusTraversable(false);
-        horizontalbuttons.getChildren().addAll(confirmbutton, cancelbutton);
-        horizontalbuttons.setSpacing(20);
-        horizontalbuttons.setAlignment(Pos.CENTER);
-        BorderPane.setMargin(horizontalbuttons, new Insets(0,0,50,0));
+        cancelButton.setId("appbutton");
+        cancelButton.setFont(new Font("Roboto",22*scale));
+        cancelButton.setFocusTraversable(false);
+        horizontalButtons.getChildren().addAll(confirmButton, cancelButton);
+        horizontalButtons.setSpacing(20);
+        horizontalButtons.setAlignment(Pos.CENTER);
+        BorderPane.setMargin(horizontalButtons, new Insets(0,0,50,0));
         BorderPane.setMargin(content, new Insets(50,0,50,0));
-        newroot.setBottom(horizontalbuttons);
-        newroot.setTop(content);
+        newRoot.setBottom(horizontalButtons);
+        newRoot.setTop(content);
         
         newWindow.getIcons().add(new Image(SETTINGS_ICON_PATH));
         newWindow.setTitle("Appearance");
@@ -400,7 +384,7 @@ public class ChessLite extends Application {
      */
     public int getPieceSelection(String pathIn) {
         int i = 0;
-        for(String str : AVALIABLE_PATHS) {
+        for(String str : AVAILABLE_PATHS) {
             if(str.equals(pathIn)) {
                 return i;
             }
@@ -424,11 +408,11 @@ public class ChessLite extends Application {
      * @param stage, the stage the game belongs to
      * @param time, the starting timer
      * @param inc, the timer to be incremented
-     * @param timertype, the timer type to be used upon game reconstruction
+     * @param timerType, the timer type to be used upon game reconstruction
      * @return Play Pane for Border Pane
      */
-    public Pane createPlayPaneTimed(Stage stage, double time, double inc, int timertype) {
-        TimedGame controller = TimedGame.constructTimedGame(true, time, inc, stage, timertype, this);
+    public Pane createPlayPaneTimed(Stage stage, double time, double inc, int timerType) {
+        TimedGame controller = TimedGame.constructTimedGame(true, time, inc, stage, timerType, this);
         return controller.getRoot();
     }
     
@@ -446,29 +430,29 @@ public class ChessLite extends Application {
         
         Label confirmLbl = new Label("Quit Application");
         confirmLbl.setId("largefont");
-        Label confirmLblsmall = new Label("Are you sure you want to quit using TreeFrog?");
-        confirmLblsmall.setId("smallfont");
-        confirmLblsmall.setMaxSize(300*scale,200*scale);
-        confirmLblsmall.setWrapText(true);
-        HBox horizontalbuttons = new HBox();
-        horizontalbuttons.setAlignment(Pos.CENTER);
-        content.getChildren().addAll(confirmLbl, confirmLblsmall, horizontalbuttons);
-        Button confirmbutton = new Button("Yes");
-        confirmbutton.setOnAction((ActionEvent event) -> {
+        Label confirmLblSmall = new Label("Are you sure you want to quit using TreeFrog?");
+        confirmLblSmall.setId("smallfont");
+        confirmLblSmall.setMaxSize(300*scale,200*scale);
+        confirmLblSmall.setWrapText(true);
+        HBox horizontalButtons = new HBox();
+        horizontalButtons.setAlignment(Pos.CENTER);
+        content.getChildren().addAll(confirmLbl, confirmLblSmall, horizontalButtons);
+        Button confirmButton = new Button("Yes");
+        confirmButton.setOnAction((ActionEvent event) -> {
             Platform.exit();
             System.exit(0);
         });
-        confirmbutton.setId("appbutton");
-        confirmbutton.setFocusTraversable(false);
-        Button cancelbutton = new Button("No");
-        cancelbutton.setOnAction((ActionEvent event) -> {
-            Stage thestage = (Stage) cancelbutton.getScene().getWindow();
-            thestage.close();
+        confirmButton.setId("appbutton");
+        confirmButton.setFocusTraversable(false);
+        Button cancelButton = new Button("No");
+        cancelButton.setOnAction((ActionEvent event) -> {
+            Stage theStage = (Stage) cancelButton.getScene().getWindow();
+            theStage.close();
         });
-        cancelbutton.setId("appbutton");
-        cancelbutton.setFocusTraversable(false);
-        horizontalbuttons.getChildren().addAll(confirmbutton, cancelbutton);
-        horizontalbuttons.setSpacing(20);
+        cancelButton.setId("appbutton");
+        cancelButton.setFocusTraversable(false);
+        horizontalButtons.getChildren().addAll(confirmButton, cancelButton);
+        horizontalButtons.setSpacing(20);
         
         newWindow.getIcons().add(new Image(APP_ICON_PATH));
         newWindow.setTitle("Confirmation");
