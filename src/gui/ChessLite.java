@@ -6,6 +6,7 @@
 package gui;
 
 import fxutil.AudioClipPlayer;
+import java.awt.GraphicsEnvironment;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -72,7 +73,8 @@ public class ChessLite extends Application {
     public static final int GREEN = 2;
     public static final int RED = 3;
     
-    private final double height = Screen.getPrimary().getBounds().getHeight()*0.8;
+    private final double height = GraphicsEnvironment.getLocalGraphicsEnvironment().
+            getDefaultScreenDevice().getDisplayMode().getHeight()*0.8;
     private final double width = height*1.35;
     private final double scale = height/960;
     private final AudioClipPlayer clip = new AudioClipPlayer(SOUND_CLIP_PATH); //soundclip
