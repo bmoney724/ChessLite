@@ -9,7 +9,7 @@ Watch a short video demonstration <ins>[here](https://www.youtube.com/watch?v=m_
 <img src="https://github.com/JosephPrichard/ChessLiteGUI/blob/master/images/chesslite8.jpg?raw=true" width="70%" height="70%"><br>
 
 ## Distribution
-* <ins>[Windows Installation](https://github.com/JosephPrichard/ChessLiteGUI/blob/master/dist/ChessLite_Installer.exe)</ins> 
+* <ins>[Windows Installation](https://github.com/JosephPrichard/ChessLiteGUI/blob/master/out/ChessLite_Installer.exe)</ins> 
 * <ins>[Jar (requires jre and javafx)](https://github.com/JosephPrichard/ChessLiteGUI/blob/master/dist/ChessLite.jar)</ins> 
 * <ins>[Source code folder](https://github.com/JosephPrichard/ChessLiteGUI/tree/master/src)</ins>
 
