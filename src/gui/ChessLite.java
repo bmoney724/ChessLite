@@ -61,10 +61,10 @@ public class ChessLite extends Application {
     public static final int BLUE = 1;
     public static final int GREEN = 2;
     public static final int RED = 3;
-    
+
     private final double height = GraphicsEnvironment.getLocalGraphicsEnvironment().
             getDefaultScreenDevice().getDisplayMode().getHeight()*0.80;
-    private final double width = height*1.37;
+    private final double width = height*1.36;
     private final double scale = height/960;
     private final AudioClipPlayer clip = new AudioClipPlayer(SOUND_CLIP_PATH); //sound clip
     private String path = "alpha"; //path for piece package

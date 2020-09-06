@@ -52,8 +52,8 @@ public class NotationBoard extends ScrollPane{
         msgLbl = new Label(msg);
         msgLbl.setPadding(new Insets(10 * app.getScale(),0,10 * app.getScale(),0));
         msgLbl.setFont(Font.font("Roboto", FontPosture.ITALIC, 22 * app.getScale()));
-        msgLbl.setMinSize(((game.getBarWidth()*0.65)-(app.getScale()*25)), 58 * app.getScale());
-        msgLbl.setMaxSize(((game.getBarWidth()*0.65)-(app.getScale()*25)), 58 * app.getScale());
+        msgLbl.setMinSize(((game.getBarWidth()*0.8)-(app.getScale()*50)), 58 * app.getScale());
+        msgLbl.setMaxSize(((game.getBarWidth()*0.8)-(app.getScale()*50)), 58 * app.getScale());
         msgLbl.setWrapText(true);
         msgLbl.setAlignment(Pos.CENTER);
         moveGui.getChildren().add(msgLbl);
