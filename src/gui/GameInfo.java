@@ -1,5 +1,5 @@
 /*
- * Stores the contents of the game to be readable by the AI, or by the 
+ * Stores the contents of the game to be readable by the 
  * controller's rendering algorithms
  * 7/3/20
  */
@@ -31,6 +31,7 @@ public class GameInfo {
     
     public static final String[] NUMBER_TO_LETTER_TABLE = {"a","b","c","d","e","f","g","h"}; //convert number to readable format
     public static final String[] NUMBER_TO_FEN = {"","P","B","N","R","Q","K","p","b","n","r","q","k"}; //convert number to FEN format
+    public static final String INITIAL_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq -";
     
     public static final byte[][] INITIAL_BOARD = 
                 {{WHITE_ROOK,WHITE_KNIGHT,WHITE_BISHOP,WHITE_QUEEN,WHITE_KING,WHITE_BISHOP,WHITE_KNIGHT,WHITE_ROOK},
@@ -394,7 +395,7 @@ public class GameInfo {
      */
     public String getMoveFEN() {
         if(moveNum < 0) {
-            return "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq -";
+            return INITIAL_FEN;
         }
         Move move = moves.get(moveNum);
         byte[][] board = move.getBoard();
@@ -528,3 +529,4 @@ public class GameInfo {
     }
     
 }
+
