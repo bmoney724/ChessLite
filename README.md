@@ -7,11 +7,6 @@ Watch a short video demonstration <ins>[here](https://www.youtube.com/watch?v=m_
 
 <img src="https://github.com/JosephPrichard/ChessLiteGUI/blob/master/demo/chesslite8.jpg?raw=true" width="70%" height="70%"><br>
 
-## Distribution
-* <ins>[Windows Installation](https://github.com/JosephPrichard/ChessLiteGUI/tree/master/out/artifacts/ChessLite/ChessLite_Installer.exe)</ins> 
-* <ins>[Jar (requires jre with javafx)](https://github.com/JosephPrichard/ChessLiteGUI/tree/master/out/artifacts/ChessLite/ChessLite.jar)</ins> 
-* <ins>[Source code folder](https://github.com/JosephPrichard/ChessLiteGUI/tree/master/src)</ins>
-
 ## Features
 * Algorithms that follow the rules of Standard Chess
 * Supports both Drag-Drop and Click-Click 
