@@ -5,7 +5,7 @@ ChessLite does not depend on any libraries aside from Java and JavaFX API.
 All ChessLite algorithms were written for this project by Joseph Prichard. 
 Watch a short video demonstration <ins>[here](https://www.youtube.com/watch?v=m_j5ejDA-hc&feature=youtu.be)</ins>.
 
-<img src="https://github.com/JosephPrichard/ChessLiteGUI/blob/master/images/chesslite8.jpg?raw=true" width="70%" height="70%"><br>
+<img src="https://github.com/JosephPrichard/ChessLiteGUI/blob/master/demo/chesslite8.jpg?raw=true" width="70%" height="70%"><br>
 
 ## Distribution
 * <ins>[Windows Installation](https://github.com/JosephPrichard/ChessLiteGUI/tree/master/out/artifacts/ChessLite/ChessLite_Installer.exe)</ins> 
@@ -39,8 +39,8 @@ Watch a short video demonstration <ins>[here](https://www.youtube.com/watch?v=m_
 ## Images
 The piece bitmaps used in this application are from Chess.com
 
-<img src="https://github.com/JosephPrichard/ChessLiteGUI/blob/master/images/chesslite7.png?raw=true" width="70%" height="70%"><br>
-<img src="https://github.com/JosephPrichard/ChessLiteGUI/blob/master/images/chesslite9.png?raw=true" width="70%" height="70%"><br>
-<img src="https://github.com/JosephPrichard/ChessLiteGUI/blob/master/images/chesslite3.png?raw=true" width="70%" height="70%">
+<img src="https://github.com/JosephPrichard/ChessLiteGUI/blob/master/demo/chesslite7.png?raw=true" width="70%" height="70%"><br>
+<img src="https://github.com/JosephPrichard/ChessLiteGUI/blob/master/demo/chesslite9.png?raw=true" width="70%" height="70%"><br>
+<img src="https://github.com/JosephPrichard/ChessLiteGUI/blob/master/demo/chesslite3.png?raw=true" width="70%" height="70%">
 
 
